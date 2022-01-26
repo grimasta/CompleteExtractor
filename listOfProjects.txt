@@ -1,0 +1,36 @@
+## https://github.com/kde/digikam
+## https://github.com/kde/amarok
+https://github.com/KDE/clazy
+https://github.com/KDE/elisa
+## https://github.com/kde/umbrello
+## https://github.com/kde/kmail
+## https://github.com/kde/kdevelop
+## https://github.com/kde/korganizer
+## https://github.com/KDE/systemsettings
+## https://github.com/kde/ktorrent
+## https://github.com/kde/akonadi
+## https://github.com/kde/kexi
+## https://github.com/kde/k3b
+## https://github.com/kde/kdelibs
+## https://github.com/kde/marble
+## https://github.com/kde/konversation
+## https://github.com/kde/kmix
+## https://github.com/kde/kolourpaint
+## https://github.com/kde/kdevplatform
+## https://github.com/kde/calligra
+## https://github.com/kde/oxygen
+## https://github.com/kde/discover
+## https://github.com/kde/breeze
+## https://github.com/KDE/akregator
+## https://github.com/kde/lokalize
+## https://github.com/kde/ark
+## https://github.com/kde/kstars
+## https://github.com/kde/ktimetracker
+## https://github.com/kde/solid
+## https://github.com/kde/gwenview
+## https://github.com/kde/juk
+## https://github.com/kde/plasma-nm
+## https://github.com/kde/kompare
+## https://github.com/kde/kget
+## https://github.com/kde/kontact
+## https://github.com/kde/kopete

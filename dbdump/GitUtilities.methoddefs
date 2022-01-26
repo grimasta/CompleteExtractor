@@ -1,0 +1,10 @@
+Clone;Clone;000020.008;src/ca/uwo/git/utilities/Clone.java;20.13;0x4004;{};{String};{URL};{}
+Clone;doClone;000025.013;src/ca/uwo/git/utilities/Clone.java;25.20;0x4;{void};{};{};{}
+Clone;main;000045.020;src/ca/uwo/git/utilities/Clone.java;45.24;0xc;{void};{String[]};{args};{}
+MoveFilesAndFolders;MoveFilesAndFolders;000016.008;src/ca/uwo/git/utilities/MoveFilesAndFolders.java;16.27;0x4004;{};{String,String};{rootPath,destinationPath};{}
+MoveFilesAndFolders;createFolders;000042.014;src/ca/uwo/git/utilities/MoveFilesAndFolders.java;42.27;0x1;{void};{String};{path};{}
+MoveFilesAndFolders;doMove;000023.013;src/ca/uwo/git/utilities/MoveFilesAndFolders.java;23.19;0x4;{void};{String};{fileName};{}
+MoveFilesAndFolders;listFilesAndFolders;000037.018;src/ca/uwo/git/utilities/MoveFilesAndFolders.java;37.37;0x1;{String[]};{String};{name};{}
+MoveFilesAndFolders;move;000047.013;src/ca/uwo/git/utilities/MoveFilesAndFolders.java;47.17;0x4;{void};{String};{pa};{}
+SelectByDate;SelectByDate;000024.008;src/ca/uwo/git/utilities/SelectByDate.java;24.20;0x4004;{};{Git,Repository};{git,repo};{}
+SelectByDate;doStuff;000029.013;src/ca/uwo/git/utilities/SelectByDate.java;29.20;0x4;{void};{};{};{}

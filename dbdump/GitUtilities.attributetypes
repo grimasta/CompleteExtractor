@@ -1,0 +1,9 @@
+ca::uwo::git::utilities::Clone;rootPath;000014.000;/home/or10n/eclipse-workspace/GitUtilities/src/ca/uwo/git/utilities/Clone.java;14.00;0x1;{String};{};{};{}
+ca::uwo::git::utilities::Clone;URL;000015.000;/home/or10n/eclipse-workspace/GitUtilities/src/ca/uwo/git/utilities/Clone.java;15.00;0x1;{String};{};{};{}
+ca::uwo::git::utilities::Clone;path;000016.000;/home/or10n/eclipse-workspace/GitUtilities/src/ca/uwo/git/utilities/Clone.java;16.00;0x1;{String};{};{};{}
+ca::uwo::git::utilities::Clone;git;000017.000;/home/or10n/eclipse-workspace/GitUtilities/src/ca/uwo/git/utilities/Clone.java;17.00;0x1;{Git};{};{};{}
+ca::uwo::git::utilities::Clone;repo;000018.000;/home/or10n/eclipse-workspace/GitUtilities/src/ca/uwo/git/utilities/Clone.java;18.00;0x1;{Repository};{};{};{}
+ca::uwo::git::utilities::SelectByDate;repo;000022.000;/home/or10n/eclipse-workspace/GitUtilities/src/ca/uwo/git/utilities/SelectByDate.java;22.00;0x1;{Repository};{};{};{}
+ca::uwo::git::utilities::SelectByDate;git;000023.000;/home/or10n/eclipse-workspace/GitUtilities/src/ca/uwo/git/utilities/SelectByDate.java;23.00;0x1;{Git};{};{};{}
+ca::uwo::git::utilities::MoveFilesAndFolders;rootPath;000013.000;/home/or10n/eclipse-workspace/GitUtilities/src/ca/uwo/git/utilities/MoveFilesAndFolders.java;13.00;0x1;{String};{};{};{}
+ca::uwo::git::utilities::MoveFilesAndFolders;destinationPath;000014.000;/home/or10n/eclipse-workspace/GitUtilities/src/ca/uwo/git/utilities/MoveFilesAndFolders.java;14.00;0x1;{String};{};{};{}

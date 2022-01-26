@@ -1,0 +1,9 @@
+Clone;URL;000015.016;src/ca/uwo/git/utilities/Clone.java;15.19;0x1;{};{};{};{}
+Clone;git;000017.013;src/ca/uwo/git/utilities/Clone.java;17.16;0x1;{};{};{};{}
+Clone;path;000016.016;src/ca/uwo/git/utilities/Clone.java;16.20;0x1;{};{};{};{}
+Clone;repo;000018.020;src/ca/uwo/git/utilities/Clone.java;18.24;0x1;{};{};{};{}
+Clone;rootPath;000014.022;src/ca/uwo/git/utilities/Clone.java;14.30;0x21;{};{};{};{}
+MoveFilesAndFolders;destinationPath;000014.016;src/ca/uwo/git/utilities/MoveFilesAndFolders.java;14.31;0x1;{};{};{};{}
+MoveFilesAndFolders;rootPath;000013.016;src/ca/uwo/git/utilities/MoveFilesAndFolders.java;13.24;0x1;{};{};{};{}
+SelectByDate;git;000023.013;src/ca/uwo/git/utilities/SelectByDate.java;23.16;0x1;{};{};{};{}
+SelectByDate;repo;000022.020;src/ca/uwo/git/utilities/SelectByDate.java;22.24;0x1;{};{};{};{}

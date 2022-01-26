@@ -1,0 +1,13 @@
+Nr. NCSS CCN JVDC Function
+  1    3   1    0 ca.uwo.git.utilities.Clone.Clone(String)
+  2   13   4    0 ca.uwo.git.utilities.Clone.doClone()
+  3    9   1    0 ca.uwo.git.utilities.Clone.main(String[])
+  4    3   1    0 ca.uwo.git.utilities.MoveFilesAndFolders.MoveFilesAndFolders(String,String)
+  5    7   2    0 ca.uwo.git.utilities.MoveFilesAndFolders.doMove(String)
+  6    3   1    0 ca.uwo.git.utilities.MoveFilesAndFolders.listFilesAndFolders(String)
+  7    3   1    0 ca.uwo.git.utilities.MoveFilesAndFolders.createFolders(String)
+  8   13   3    0 ca.uwo.git.utilities.MoveFilesAndFolders.move(String)
+Average Function NCSS:       6.75
+Average Function CCN:        1.75
+Average Function JVDC:       0.00
+Program NCSS:               82.00

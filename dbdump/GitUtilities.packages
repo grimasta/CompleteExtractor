@@ -1,0 +1,4 @@
+src/ca/uwo/git/utilities/package-info.java;8;package ca.uwo.git.utilities;
+src/ca/uwo/git/utilities/Clone.java;1;package ca.uwo.git.utilities;
+src/ca/uwo/git/utilities/SelectByDate.java;1;package ca.uwo.git.utilities;
+src/ca/uwo/git/utilities/MoveFilesAndFolders.java;1;package ca.uwo.git.utilities;
