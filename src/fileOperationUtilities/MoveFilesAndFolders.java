@@ -76,7 +76,7 @@ public class MoveFilesAndFolders {
 			if (Files.notExists(Paths.get(PathVMRectifier.deRectify(sourcePathIncremental))))
 				mkdir(sourcePathIncremental);
 		}
-		System.out.println(source + " -> " + target);
+//		System.out.println(source + " -> " + target);
 		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicCopy() + source + " " + target);
 	}
 

@@ -1,7 +1,7 @@
 ## https://github.com/kde/digikam
 ## https://github.com/kde/amarok
-https://github.com/KDE/clazy
-https://github.com/KDE/elisa
+## https://github.com/KDE/clazy
+## https://github.com/KDE/elisa
 ## https://github.com/kde/umbrello
 ## https://github.com/kde/kmail
 ## https://github.com/kde/kdevelop
@@ -9,7 +9,7 @@ https://github.com/KDE/elisa
 ## https://github.com/KDE/systemsettings
 ## https://github.com/kde/ktorrent
 ## https://github.com/kde/akonadi
-## https://github.com/kde/kexi
+https://github.com/kde/kexi
 ## https://github.com/kde/k3b
 ## https://github.com/kde/kdelibs
 ## https://github.com/kde/marble

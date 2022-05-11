@@ -27,11 +27,11 @@ public class DynamicCommands {
 	public static String getDynamicDelete() {
 		switch(System.getProperty("os.name")) {
 		case "Linux":
-			return "rm ";
+			return "rm -r ";
 		case "Windows 10":
-			return "rm ";
+			return "rm -r ";
 		default:
-			return "rm ";
+			return "rm -r ";
 		}
 	}
 	

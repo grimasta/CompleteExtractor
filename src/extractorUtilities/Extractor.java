@@ -17,7 +17,7 @@ import fileOperationUtilities.MoveFilesAndFolders;
 import fileOperationUtilities.PathVMRectifier;
 import paths.DynamicPaths;
 
-public class Extractor {
+public class Extractor implements Extraction {
 
 	private String target;
 	private String rootPath;
