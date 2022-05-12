@@ -1,17 +1,12 @@
+
 package extractorUtilities;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 
 import console.commanders.ConsoleFactory;
 import fileOperationUtilities.PathVMRectifier;
-import paths.DynamicPaths;
 
-public class SourceNavigatorExtractor implements Extraction {
+public class SourceNavigatorExtractor implements ExtractionMethod {
 
 	private String target;
 	private String rootPath;
@@ -25,6 +20,10 @@ public class SourceNavigatorExtractor implements Extraction {
 		this.projectName = rootPath.split("/")[rootPath.split("/").length - 1];
 	}
 	
+	@Override
+	public ExtractionMethod getNewInstance(String target, String rootPath, String projectPath) {
+		return new SourceNavigatorExtractor(target, rootPath, projectPath);
+	}
 	
 	@Override
 	public String checkLanguage() {

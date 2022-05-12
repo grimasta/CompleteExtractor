@@ -1,3 +1,4 @@
+
 package extractorUtilities;
 
 import java.io.BufferedReader;
@@ -6,17 +7,16 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import console.commanders.ConsoleFactory;
-import fileOperationUtilities.MoveFilesAndFolders;
 import fileOperationUtilities.PathVMRectifier;
 import paths.DynamicPaths;
 
-public class MultimetricExtractor implements Extraction {
+public class MultimetricExtractor implements ExtractionMethod {
 
 	private String target;
 	private String rootPath;
+	@SuppressWarnings("unused")
 	private String projectPath;
 	private String projectName; 
 	
@@ -25,6 +25,11 @@ public class MultimetricExtractor implements Extraction {
 		this.rootPath = PathVMRectifier.rectify(rootPath);
 		this.projectPath = projectPath;
 		this.projectName = rootPath.split("/")[rootPath.split("/").length - 1];
+	}
+	
+	@Override
+	public ExtractionMethod getNewInstance(String target, String rootPath, String projectPath) {
+		return new MultimetricExtractor(target, rootPath, projectPath);
 	}
 	
 	@Override
@@ -46,7 +51,7 @@ public class MultimetricExtractor implements Extraction {
 //		System.out.println(list_of_files_path);
 		String[] commandArgs = { "find ", fullProjectPath, " > ",  list_of_files_path};
 //		
-		File targetCommit = new File(this.rootPath + this.target);
+//		File targetCommit = new File(this.rootPath + this.target);
 		ConsoleFactory.getConsole().run(commandArgs, null, null, this.target);
 		try {
 //			read the list of file

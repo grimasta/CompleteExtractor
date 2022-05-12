@@ -11,13 +11,11 @@ import java.util.stream.Stream;
 
 import console.commanders.ConsoleFactory;
 import console.commanders.DynamicCommands;
-import console.commanders.SshConsole;
-import console.commanders.UnixConsole;
 import fileOperationUtilities.MoveFilesAndFolders;
 import fileOperationUtilities.PathVMRectifier;
 import paths.DynamicPaths;
 
-public class Extractor implements Extraction {
+public class Extractor implements ExtractionMethod {
 
 	private String target;
 	private String rootPath;
@@ -29,6 +27,11 @@ public class Extractor implements Extraction {
 		this.projectPath = projectPath;
 	}
 
+	@Override
+	public ExtractionMethod getNewInstance(String target, String rootPath, String projectPath) {
+		return new Extractor(target, rootPath, projectPath);
+	}
+	
 	public String checkLanguage() {
 		String localPath = rootPath + this.projectPath;
 		List<String> fileNames = new ArrayList<>();

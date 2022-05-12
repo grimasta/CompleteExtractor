@@ -3,6 +3,10 @@
 /GitUtilities.proj
 /clazy_commits.csv
 /clazy_ids.txt
+<<<<<<< HEAD
+=======
+/dbdump/
+>>>>>>> refs/heads/keep_for_a_bit
 /elisa_commits.csv
 /elisa_ids.txt
 /listOfProjects.txt

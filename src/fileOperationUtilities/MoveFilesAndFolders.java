@@ -25,6 +25,10 @@ public class MoveFilesAndFolders {
 			this.destinationPath = PathVMRectifier.rectify(destinationPath);
 	}
 
+	public MoveFilesAndFolders getNewInstance(String rootPath, String destinationPath, Map<String, String> listOfFiles) {
+		return new MoveFilesAndFolders(rootPath, destinationPath, listOfFiles);
+	}
+	
 	/**
 	 * move filename from the rootPath to the destinationPath provided at
 	 * instantiation of the Class doesn't work if files are within any folder depth.

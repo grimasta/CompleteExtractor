@@ -1,3 +1,4 @@
+
 package extractorUtilities;
 
 import java.io.BufferedReader;
@@ -8,12 +9,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import console.commanders.ConsoleFactory;
-import console.commanders.DynamicCommands;
-import fileOperationUtilities.MoveFilesAndFolders;
 import fileOperationUtilities.PathVMRectifier;
 import paths.DynamicPaths;
 
-public class SrcMLExtractor implements Extraction {
+public class SrcMLExtractor implements ExtractionMethod {
 
 	private String target;
 	private String rootPath;
@@ -26,6 +25,11 @@ public class SrcMLExtractor implements Extraction {
 		this.rootPath = PathVMRectifier.rectify(rootPath);
 		this.projectPath = projectPath;
 		this.projectName = rootPath.split("/")[rootPath.split("/").length - 1];
+	}
+
+	@Override
+	public ExtractionMethod getNewInstance(String target, String rootPath, String projectPath) {
+		return new SrcMLExtractor(target, rootPath, projectPath);
 	}
 	
 	@Override

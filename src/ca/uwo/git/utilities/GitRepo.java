@@ -61,6 +61,7 @@ public class GitRepo {
 	private AbstractTreeIterator newTree = new EmptyTreeIterator();
 	private static final Logger logger = LogManager.getLogger(Git.class);
 	private PrintWriter DataWriter = null;
+	private int thread_ID = 1;
 
 	public PrintWriter getDataWriter() {
 		return DataWriter;
@@ -83,6 +84,13 @@ public class GitRepo {
 		} catch (IOException ioe) {
 			System.out.println("error trying to open " + this.strPath.replace("/", "") + "_commits.csv file");
 		}
+	}
+	
+	public GitRepo copy(int thread_ID) {
+		GitRepo copy = new GitRepo(this.URL);
+		copy.thread_ID = thread_ID;
+		copy.strPath += copy.thread_ID;
+		return copy;
 	}
 
 	public void initializeGitRepo() {

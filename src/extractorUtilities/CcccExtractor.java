@@ -17,7 +17,7 @@ import console.commanders.ConsoleFactory;
 import fileOperationUtilities.MoveFilesAndFolders;
 import paths.DynamicPaths;
 
-public class CcccExtractor implements Extraction {
+public class CcccExtractor implements ExtractionMethod {
 
 	private String target;
 	private String rootPath;
@@ -31,6 +31,11 @@ public class CcccExtractor implements Extraction {
 		this.projectName = rootPath.split("/")[rootPath.split("/").length - 1];
 	}
 
+	@Override
+	public ExtractionMethod getNewInstance(String target, String rootPath, String projectPath) {
+		return new CcccExtractor(target, rootPath, projectPath);
+	}
+	
 	@Override
 	public String checkLanguage() {
 		String localPath = rootPath + this.projectPath;

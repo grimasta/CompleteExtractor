@@ -8,11 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.logging.log4j.util.Strings;
-import org.bouncycastle.util.test.TestRandomBigInteger;
-
-import com.jcraft.jsch.jce.Random;
-
 public class SshConsole implements Console {
 
 	private static SshConsole theConsole;
@@ -32,6 +27,8 @@ public class SshConsole implements Console {
 //	ssh -F C:\Users\spawn\vagrant_workspaces\ExtractorSpace\vagrant-ssh default "/vagrant/run_extractor.sh"
 
 	public int run(String command, String target) {
+		int retries = 4;
+		int currentTry = 0;
 		Runtime thisRuntime = Runtime.getRuntime();
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("../../run_script.sh")));
@@ -46,7 +43,21 @@ public class SshConsole implements Console {
 			Process executionProcess = thisRuntime.
 					exec("cmd /c " + "..\\\\..\\\\bash_script" + target + ".bat");
 			executionProcess.waitFor();
-			
+			currentTry++;
+			while (executionProcess.exitValue() != 0) {
+				if (currentTry < retries) {
+					try {
+						Thread.sleep(1000*currentTry);
+					} catch (InterruptedException ie) {
+						System.out.println(ie.getMessage());
+					}
+					currentTry ++;
+					executionProcess = thisRuntime.
+							exec("cmd /c " + "..\\\\..\\\\bash_script" + target + ".bat");
+					executionProcess.waitFor();
+				} else
+					break;
+			}
 //			BufferedReader br = new BufferedReader(new InputStreamReader(executionProcess.getInputStream()));
 //			String s;
 //			while ((s = br.readLine()) != null)
@@ -151,7 +162,8 @@ public class SshConsole implements Console {
 	}
 
 	public int run(String[] command, String[] envp, File dir, String target) {
-
+		int retries = 4;
+		int currentTry = 0;
 		Runtime thisRuntime = Runtime.getRuntime();
 		try {
 //			BufferedWriter bw = new BufferedWriter(new FileWriter(new File("../../run_script.sh")));
@@ -176,6 +188,22 @@ public class SshConsole implements Console {
 				for (int i = 1; i < Parts.length; i++)
 					pwd += "/" + Parts[i];
 				bw.write("cd " + pwd + "\n");
+			}
+			
+			currentTry++;
+			while (executionProcess.exitValue() != 0) {
+				if (currentTry < retries) {
+					try {
+						Thread.sleep(1000*currentTry);
+					} catch (InterruptedException ie) {
+						System.out.println(ie.getMessage());
+					}
+					currentTry ++;
+					executionProcess = thisRuntime.
+							exec("cmd /c " + "..\\\\..\\\\bash_script" + target + ".bat");
+					executionProcess.waitFor();
+				} else
+					break;
 			}
 			
 //			executionProcess.waitFor();
@@ -213,7 +241,7 @@ public class SshConsole implements Console {
 			return -1;
 		}
 	}
-
+	
 	public String runGetOutput(String command) {
 		String commandOutput = "";
 		Runtime thisRuntime = Runtime.getRuntime();
