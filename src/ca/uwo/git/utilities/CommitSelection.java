@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import configurations.RunConfiguration;
@@ -12,7 +13,7 @@ import configurations.RunConfiguration;
 public class CommitSelection {
 
 	private Set<String> currentCollection = new HashSet<String>();
-
+	private Set<String> yearBasedSelection = new HashSet<String>();
 	public CommitSelection() {
 	}
 
@@ -22,7 +23,7 @@ public class CommitSelection {
 			projectName = projectName.replace("/", "");
 			BufferedReader br = new BufferedReader(
 					new FileReader(new File("..\\..\\ExtractorUtilities\\selected_commits_sibyl\\"
-							+ RunConfiguration.SelectedCommits + "\\" + projectName + ".csv")));
+							+ RunConfiguration.SELECTED_COMMITS + "\\" + projectName + ".csv")));
 			while (br.ready()) {
 				currentCollection.add(br.readLine().replace("\n", ""));
 			}
@@ -35,9 +36,15 @@ public class CommitSelection {
 
 	}
 
-	public Boolean contains(String date) {
-//		System.out.println(date);
-		return currentCollection.contains(date);
+	public Boolean contains(String commitId) {
+		boolean contains;
+		contains = currentCollection.contains(commitId) || yearBasedSelection.contains(commitId);
+		return contains;
+	}
+
+	public void setYearlySelectedCommits(List<String> selectedFromYear) {
+		this.yearBasedSelection.addAll(selectedFromYear);
+		
 	}
 
 }

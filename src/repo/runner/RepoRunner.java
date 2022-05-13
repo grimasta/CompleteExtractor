@@ -7,8 +7,9 @@ import java.util.List;
 
 import ca.uwo.git.utilities.CommitSelection;
 import ca.uwo.git.utilities.GitRepo;
+import configurations.RunConfiguration;
 import extractorUtilities.ExtractionMethod;
-import facades.MultimetricFacade;
+import facades.ProxyFacade;
 import fileOperationUtilities.MoveFilesAndFolders;
 import paths.DynamicPaths;
 
@@ -66,11 +67,12 @@ public class RepoRunner implements Runnable {
 				for (File file : alreadydone.listFiles()) {
 					listofDone.add(file.getName().replace(".json", ""));
 				}
-			selectedFromYear = gitRepo.getAllCommitNamesForYear(new String[] { "1995", "1996", "1997", "1998", "1999",
-					"2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011",
-					"2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022" });
+			if (RunConfiguration.SELECTED_YEARS.length > 0) {
+				selectedFromYear = gitRepo.getAllCommitNamesForYear(RunConfiguration.SELECTED_YEARS);
+				commitSelection.setYearlySelectedCommits(selectedFromYear);
+			}
 			System.out.println(gitRepo.getProjectName() + " has a total of " + gitRepo.getAllCommitNames().size());
-			while (gitRepo.hasNext() && !MultimetricFacade.stop.get("stop")) {
+			while (gitRepo.hasNext() && !ProxyFacade.stop.get("stop")) {
 				// checkout the next commit in the repo
 				gitRepo.moveToNextCommit();
 				if (!commitSelection.contains(gitRepo.getCurrentCommitName())) {
@@ -83,7 +85,8 @@ public class RepoRunner implements Runnable {
 				if (gitRepo.checkoutNextCommit()) {
 					for (MoveFilesAndFolders mfaf : this.moverUtilities) {
 						MoveFilesAndFolders moveFilesAndFoldersOfCommit = mfaf.getNewInstance(gitRepo.getProjectPath(),
-								gitRepo.getRootPath().replace("/projects_extracted", "") + "increments/"
+								gitRepo.getRootPath().replace("/projects_extracted", "") + "increments/" + 
+						RunConfiguration.SELECTED_COMMITS
 										+ gitRepo.getProjectName() + gitRepo.getCurrentCommitName() + "/",
 								gitRepo.getChangedFiles());
 						// using the initialized mover move all files from their old location to a new
