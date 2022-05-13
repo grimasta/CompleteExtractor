@@ -8,19 +8,19 @@ import extractorUtilities.ExtractorType;
 
 public class RunConfiguration {
 	
-//	public static final String SELECTED_COMMITS = "3years";
+//	public static final String SELECTED_COMMITS = "3years/";
 	public static final String SELECTED_COMMITS = "3000commits";
 	public static final List<ExtractorType> EXTRACTOR_TYPES = new ArrayList<>();
 	ExtractorType[] a = new ExtractorType[] {
-			ExtractorType.CCCC,
-			ExtractorType.EOD,
-			ExtractorType.FETCH,
-			ExtractorType.FINALISATION,
-			ExtractorType.IDS,
-			ExtractorType.MULTIMETRIC,
+//			ExtractorType.CCCC,
+//			ExtractorType.EOD,
+//			ExtractorType.FETCH,
+//			ExtractorType.FINALISATION,
+//			ExtractorType.IDS,
+//			ExtractorType.MULTIMETRIC,
 			ExtractorType.SNAVIGATOR,
-			ExtractorType.SRCML,
-			ExtractorType.FINALISATION
+//			ExtractorType.SRCML,
+//			ExtractorType.FINALISATION
 	};
 	boolean b = Collections.addAll(EXTRACTOR_TYPES, a);
 	
