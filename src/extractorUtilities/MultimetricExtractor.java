@@ -27,6 +27,10 @@ public class MultimetricExtractor implements ExtractionMethod {
 		this.projectName = rootPath.split("/")[rootPath.split("/").length - 1];
 	}
 	
+	public MultimetricExtractor() {
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public ExtractionMethod getNewInstance(String target, String rootPath, String projectPath) {
 		return new MultimetricExtractor(target, rootPath, projectPath);

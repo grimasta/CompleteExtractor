@@ -13,16 +13,27 @@ public class MoveFilesAndFolders {
 	private String rootPath;
 	private String destinationPath;
 	private Map<String, String> listOfFiles;
-
+	private String currentCommitID;
+	/**
+	 * 
+	 * @param rootPath example ../../ExtractorUtilities/projects_extracted/kwin/
+	 * @param destinationPath example ../../ExtractorUtilities/increments/3000commits/kwin/2e7bc0df87845e2a5e22f2280f7047033fa83af3/
+	 * @param listOfFiles 
+	 */
+	
 	public MoveFilesAndFolders(String rootPath, String destinationPath, Map<String, String> listOfFiles) {
-		this.rootPath = PathVMRectifier.rectify(rootPath);
-		this.destinationPath = PathVMRectifier.rectify(destinationPath);
+		this.rootPath = PathVMRectifier.rectify(rootPath); // example rootPath = /vagrant/ExtractorUtilities/projects_extracted/yetus/
+		this.destinationPath = PathVMRectifier.rectify(destinationPath); //example destinationPath = /vagrant/ExtractorUtilities/increments/3000commits/yetus//32153d6737981e61bbfe53b944724bedcb0c5e06/
+		this.currentCommitID = destinationPath.split("/")[destinationPath.split("/").length-1];
 		this.listOfFiles = listOfFiles;
 	}
 
 	public MoveFilesAndFolders(String rootPath, String destinationPath) {
 			this.rootPath = PathVMRectifier.rectify(rootPath);
 			this.destinationPath = PathVMRectifier.rectify(destinationPath);
+	}
+	
+	public MoveFilesAndFolders() {
 	}
 
 	public MoveFilesAndFolders getNewInstance(String rootPath, String destinationPath, Map<String, String> listOfFiles) {
@@ -42,7 +53,7 @@ public class MoveFilesAndFolders {
 		File destination =  new File(PathVMRectifier.deRectify(this.destinationPath));
 		if (!destination.exists())
 			mkdir(this.destinationPath);
-		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicCopy() + source + " " + target);
+		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicCopy() + source + " " + target, currentCommitID);
 	}
 
 	/**
@@ -59,7 +70,7 @@ public class MoveFilesAndFolders {
 		if (!destination.exists())
 			mkdir(this.destinationPath);
 		System.out.println(source + " -> " + target);
-		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicRecursiveCopy() + source + " " + target);
+		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicRecursiveCopy() + source + " " + target, currentCommitID);
 	}
 
 	/**
@@ -81,7 +92,7 @@ public class MoveFilesAndFolders {
 				mkdir(sourcePathIncremental);
 		}
 //		System.out.println(source + " -> " + target);
-		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicCopy() + source + " " + target);
+		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicCopy() + source + " " + target, currentCommitID);
 	}
 
 	public void moveAllFromMap() {
@@ -99,7 +110,7 @@ public class MoveFilesAndFolders {
 		System.out.println(this.rootPath + " - > " + this.destinationPath);
 
 		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicRecursiveCopy()
-				+ this.rootPath.substring(0, this.rootPath.length() - 1) + " " + this.destinationPath);
+				+ this.rootPath.substring(0, this.rootPath.length() - 1) + " " + this.destinationPath, currentCommitID);
 	}
 
 	public void deleteDestinationFolder() {
@@ -109,11 +120,11 @@ public class MoveFilesAndFolders {
 	public void moveBack(String fileName) {
 		String source = this.destinationPath + fileName;
 		String target = this.rootPath + fileName;
-		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicCopy() + source + " " + target);
+		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicCopy() + source + " " + target, currentCommitID);
 	}
 
 	private void mkdir(String directoryPath) {
-		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicMakeDir() + directoryPath);
+		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicMakeDir() + directoryPath, currentCommitID);
 	}
 
 }

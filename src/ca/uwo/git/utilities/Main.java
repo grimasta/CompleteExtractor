@@ -23,6 +23,7 @@ import facades.FacadeType;
 import facades.FetchFacade;
 import facades.IdsFacade;
 import facades.MultimetricFacade;
+import facades.ProxyFacade;
 import facades.SrcMLFacade;
 import fileOperationUtilities.InitializeFolderStructure;
 import fileOperationUtilities.MoveFilesAndFolders;
@@ -58,21 +59,22 @@ public class Main {
 
 //		System.exit(0);
 
-		String language;
-		String MO = "run";
+//		String language;
+//		String MO = "run";
 		System.out.println("starting");
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		try {
-			System.out.println(
-					"Please select a Mode of Operation ['finalize', 'fetch', 'ids', 'eod' (Extract Only Dates), 'multimetric', 'srcML', 'snavigator']:");
-			MO = br.readLine().toLowerCase();
-		} catch (IOException ioe) {
-			System.out.println(ioe.getMessage() + " exception in Main.java while reading MO");
-		}
-		ExtractionFacade extractionFacade = FacadeFactory.create(FacadeType.valueOfLabel(MO));
-		extractionFacade.setRepos(repos);
-		extractionFacade.setBufferedReader(br);
-		extractionFacade.doExtraction();
+//		try {
+////			System.out.println(
+//					"Please select a Mode of Operation ['finalize', 'fetch', 'ids', 'eod' (Extract Only Dates), 'multimetric', 'srcML', 'snavigator']:");
+//			MO = br.readLine().toLowerCase();
+//		} catch (IOException ioe) {
+//			System.out.println(ioe.getMessage() + " exception in Main.java while reading MO");
+//		}
+//		ExtractionFacade extractionFacade = FacadeFactory.create(FacadeType.valueOfLabel(MO));
+		ExtractionFacade proxy = new ProxyFacade();
+		proxy.setRepos(repos);
+		proxy.setBufferedReader(br);
+		proxy.doExtraction();
 		System.out.println("Done");
 
 	}

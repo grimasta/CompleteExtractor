@@ -31,6 +31,10 @@ public class CcccExtractor implements ExtractionMethod {
 		this.projectName = rootPath.split("/")[rootPath.split("/").length - 1];
 	}
 
+	public CcccExtractor() {
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public ExtractionMethod getNewInstance(String target, String rootPath, String projectPath) {
 		return new CcccExtractor(target, rootPath, projectPath);

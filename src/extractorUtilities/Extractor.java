@@ -27,6 +27,10 @@ public class Extractor implements ExtractionMethod {
 		this.projectPath = projectPath;
 	}
 
+	public Extractor() {
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public ExtractionMethod getNewInstance(String target, String rootPath, String projectPath) {
 		return new Extractor(target, rootPath, projectPath);

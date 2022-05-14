@@ -2,6 +2,9 @@ package repo.runner;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +14,7 @@ import configurations.RunConfiguration;
 import extractorUtilities.ExtractionMethod;
 import facades.ProxyFacade;
 import fileOperationUtilities.MoveFilesAndFolders;
+import fileOperationUtilities.PathVMRectifier;
 import paths.DynamicPaths;
 
 public class RepoRunner implements Runnable {
@@ -34,7 +38,7 @@ public class RepoRunner implements Runnable {
 	public void addExtractor(ExtractionMethod extractionMethod) {
 		extractionMethods.add(extractionMethod);
 	}
-	
+
 	public void addMover(MoveFilesAndFolders mfaf) {
 		moverUtilities.add(mfaf);
 	}
@@ -72,7 +76,9 @@ public class RepoRunner implements Runnable {
 				commitSelection.setYearlySelectedCommits(selectedFromYear);
 			}
 			System.out.println(gitRepo.getProjectName() + " has a total of " + gitRepo.getAllCommitNames().size());
+			String language = this.checkLanguage();
 			while (gitRepo.hasNext() && !ProxyFacade.stop.get("stop")) {
+
 				// checkout the next commit in the repo
 				gitRepo.moveToNextCommit();
 				if (!commitSelection.contains(gitRepo.getCurrentCommitName())) {
@@ -85,20 +91,22 @@ public class RepoRunner implements Runnable {
 				if (gitRepo.checkoutNextCommit()) {
 					for (MoveFilesAndFolders mfaf : this.moverUtilities) {
 						MoveFilesAndFolders moveFilesAndFoldersOfCommit = mfaf.getNewInstance(gitRepo.getProjectPath(),
-								gitRepo.getRootPath().replace("/projects_extracted", "") + "increments/" + 
-						RunConfiguration.SELECTED_COMMITS
-										+ gitRepo.getProjectName() + gitRepo.getCurrentCommitName() + "/",
+								gitRepo.getRootPath().replace("/projects_extracted", "") + "increments/"
+										+ RunConfiguration.SELECTED_COMMITS + "/" + gitRepo.getProjectName()
+										+ gitRepo.getCurrentCommitName() + "/",
 								gitRepo.getChangedFiles());
 						// using the initialized mover move all files from their old location to a new
 						// temporary location to run the extractor on
 						moveFilesAndFoldersOfCommit.moveAllFromMap();
 					}
-					
+
 					// initialize an extractor for this commit
 					for (ExtractionMethod em : this.extractionMethods) {
-						if( em.getNewInstance(gitRepo.getCurrentCommitName(), gitRepo.getRootPath().replace("/projects_extracted", "")
-								+ "increments/" + gitRepo.getProjectName().replace("/", ""),
-						gitRepo.getCurrentCommitName()).doExtraction(null) ) {
+						if (em.getNewInstance(gitRepo.getCurrentCommitName(),
+								gitRepo.getRootPath().replace("/projects_extracted", "") + "increments/"
+										+ RunConfiguration.SELECTED_COMMITS + "/"
+										+ gitRepo.getProjectName().replace("/", ""),
+								gitRepo.getCurrentCommitName()).doExtraction(language)) {
 						} else {
 							break;
 						}
@@ -106,9 +114,9 @@ public class RepoRunner implements Runnable {
 				} else {
 					break;
 				}
-//			if (MultimetricFacade.stop.get("stop")) {
-//				break;
-//			}
+				if (ProxyFacade.stop.get("stop")) {
+					break;
+				}
 
 			}
 			System.out.println("finished_extraction for " + this.gitRepo.getProjectName());
@@ -117,4 +125,46 @@ public class RepoRunner implements Runnable {
 			System.out.println("oops");
 		}
 	}
+
+	public String checkLanguage() {
+
+		String localPath = gitRepo.getRootPath() + "/" + gitRepo.getProjectName() + "/";
+//		System.out.println(localPath);
+		localPath = PathVMRectifier.deRectify(localPath);
+		try {
+			List<String> cFiles = new ArrayList<>();
+			Files.find(Paths.get(localPath), 999,
+					(p, bfa) -> bfa.isRegularFile() && (p.getFileName().toString().toLowerCase().matches(".*\\.c")
+							|| p.getFileName().toString().toLowerCase().matches(".*\\.h")
+							|| p.getFileName().toString().toLowerCase().matches(".*\\.cpp")
+							|| p.getFileName().toString().toLowerCase().matches(".*\\.hpp")
+							|| p.getFileName().toString().toLowerCase().matches(".*\\.cxx")
+							|| p.getFileName().toString().toLowerCase().matches(".*\\.cpp")
+							|| p.getFileName().toString().toLowerCase().matches(".*\\.cc")
+							|| p.getFileName().toString().toLowerCase().matches(".*\\.hh")
+							|| p.getFileName().toString().toLowerCase().matches(".*\\.c++")
+							|| p.getFileName().toString().toLowerCase().matches(".*\\.h++")))
+					.forEach(bfa -> cFiles.add(bfa.toString()));
+//					System.out.println(cFiles.size());
+			List<String> javaFiles = new ArrayList<>();
+
+			Files.find(Paths.get(localPath), 999,
+					(p, bfa) -> bfa.isRegularFile() && (p.getFileName().toString().toLowerCase().matches(".*\\.java")))
+					.forEach(bfa -> javaFiles.add(bfa.toString()));
+//					System.out.println(javaFiles.size());
+			if ((javaFiles.size() != 0) || (cFiles.size() != 0))
+				if (javaFiles.size() > cFiles.size())
+					return "java";
+				else
+					return "cpp";
+			else
+				return "none";
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "none";
+		}
+
+	}
+
 }

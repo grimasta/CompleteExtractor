@@ -27,6 +27,10 @@ public class SrcMLExtractor implements ExtractionMethod {
 		this.projectName = rootPath.split("/")[rootPath.split("/").length - 1];
 	}
 
+	public SrcMLExtractor() {
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public ExtractionMethod getNewInstance(String target, String rootPath, String projectPath) {
 		return new SrcMLExtractor(target, rootPath, projectPath);

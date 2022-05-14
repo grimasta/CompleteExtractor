@@ -97,7 +97,7 @@ public class GitRepo {
 		try {
 			this.projectPath = rootPath + this.strPath;
 			Path path = new File(rootPath + this.strPath).toPath();
-			System.out.println("stored in : " + this.rootPath + " and " + this.strPath);
+//			System.out.println("stored in : " + this.rootPath + " and " + this.strPath);
 			if (Files.exists(path)) {
 				this.git = Git.open(new File(rootPath + this.strPath + ".git"));
 				this.git.checkout();
@@ -181,7 +181,6 @@ public class GitRepo {
 					changes.put(de.getOldPath(), de.getNewPath());
 				}
 			}
-			System.out.println(changes.size());
 		} catch (GitAPIException gapie) {
 			System.out.println(
 					"GitAPIException caught in method GitRepo.getChangedFiles, Full Message : " + gapie.getMessage());
