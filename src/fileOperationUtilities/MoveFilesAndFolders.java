@@ -93,16 +93,24 @@ public class MoveFilesAndFolders {
 	public void moveInDepth(String fileName) {
 		String source = this.rootPath + fileName;
 		String target = this.destinationPath + fileName;
+//		System.out.println("__"+fileName+"__");
+		
 		String[] sourceParts = target.split("/");
 		String sourcePathIncremental = sourceParts[0] + "/" + sourceParts[1] + "/";
 		int i = 2;
 		while (i < sourceParts.length - 1) {
-			sourcePathIncremental += sourceParts[i] + "/";
+			if (sourceParts[i].contains(" ")) {
+				System.out.println("Found a filename containing a space in it and appropriately made it work using single quotes");
+				sourcePathIncremental += "\'" + sourceParts[i] + "\'/";
+			} else
+				sourcePathIncremental += sourceParts[i] + "/";
 			i++;
 			if (Files.notExists(Paths.get(PathVMRectifier.deRectify(sourcePathIncremental)))) {
 				mkdir(sourcePathIncremental);
 			}
 		}
+		if (fileName.contains(" "))
+			target = this.destinationPath + "\'" + fileName + "\'"; 
 //		System.out.println(source + " -> " + target);
 		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicCopy() + source + " " + target, currentCommitID);
 	}
