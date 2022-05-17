@@ -398,6 +398,7 @@ public class GitRepo {
 			if (gapie.getMessage().contains("Checkout conflict with files")) {
 				try {
 					this.git.stashCreate().call();
+					this.checkoutNextCommit();
 				} catch (GitAPIException gapie2) {
 					System.out.println("Failed again, resetting and exiting");
 					this.resetToHead();
