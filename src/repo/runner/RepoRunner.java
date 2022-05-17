@@ -65,7 +65,7 @@ public class RepoRunner implements Runnable {
 		if (threads == 0) {
 			gitRepo.initializeGitRepo();
 			List<String> selectedFromYear;
-			File alreadydone = new File(DynamicPaths.getPath() + "multimetric/" + gitRepo.getProjectName());
+			File alreadydone = new File(DynamicPaths.getPath() + "increments/" + RunConfiguration.SELECTED_COMMITS + "/" + gitRepo.getProjectName());
 			List<String> listofDone = new ArrayList<>();
 			if (alreadydone.exists())
 				for (File file : alreadydone.listFiles()) {
@@ -77,6 +77,8 @@ public class RepoRunner implements Runnable {
 			}
 			System.out.println(gitRepo.getProjectName() + " has a total of " + gitRepo.getAllCommitNames().size());
 			String language = this.checkLanguage();
+			if (language == "none")
+				return;
 			while (gitRepo.hasNext() && !ProxyFacade.stop.get("stop")) {
 
 				// checkout the next commit in the repo
@@ -87,7 +89,7 @@ public class RepoRunner implements Runnable {
 				if (listofDone.contains(gitRepo.getCurrentCommitName()) || gitRepo.currentCommitIsMerge()) {
 					continue;
 				}
-
+//				System.out.println(gitRepo.getCurrentCommitName());
 				if (gitRepo.checkoutNextCommit()) {
 					for (MoveFilesAndFolders mfaf : this.moverUtilities) {
 						MoveFilesAndFolders moveFilesAndFoldersOfCommit = mfaf.getNewInstance(gitRepo.getProjectPath(),

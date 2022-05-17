@@ -1,5 +1,6 @@
 package configurations;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +25,11 @@ public class RunConfiguration {
 	};
 	private static boolean b = Collections.addAll(EXTRACTOR_TYPES, a);
 	
+	public static String getVagrantSshScriptLocation() {
+		File f = new File(System.getProperty("user.dir"));
+		File file = f.getParentFile().getParentFile();
+		return file.getAbsolutePath() + "\\vagrant-ssh";
+	}
 	
 	public static final String[] SELECTED_YEARS = { 
 //			"1995", "1996", "1997", "1998", "1999",

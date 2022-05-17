@@ -149,7 +149,7 @@ public class Extractor implements ExtractionMethod {
 			if (f.getName().contains(".rsf") || f.getName().contains(".log") || f.getName().contains(".cdif"))
 				f.delete();
 		String folderTreeForDeletion = this.rootPath + this.target;
-		ConsoleFactory.getConsole().run(deleteCommand + folderTreeForDeletion);
+		ConsoleFactory.getConsole().run(deleteCommand + folderTreeForDeletion, target);
 	}
 
 }

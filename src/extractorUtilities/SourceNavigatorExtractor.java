@@ -10,6 +10,7 @@ import java.util.List;
 
 import configurations.RunConfiguration;
 import console.commanders.ConsoleFactory;
+import fileOperationUtilities.MoveFilesAndFolders;
 import fileOperationUtilities.PathVMRectifier;
 
 public class SourceNavigatorExtractor implements ExtractionMethod {
@@ -21,7 +22,7 @@ public class SourceNavigatorExtractor implements ExtractionMethod {
 
 	public SourceNavigatorExtractor() {
 	}
-	
+
 	public SourceNavigatorExtractor(String target, String rootPath, String projectPath) {
 		this.target = target;
 		this.rootPath = PathVMRectifier.rectify(rootPath);
@@ -34,8 +35,6 @@ public class SourceNavigatorExtractor implements ExtractionMethod {
 		SourceNavigatorExtractor sne = new SourceNavigatorExtractor(target, rootPath, projectPath);
 		return sne;
 	}
-
-	
 
 	@Override
 	public String checkLanguage() {
@@ -89,9 +88,12 @@ public class SourceNavigatorExtractor implements ExtractionMethod {
 						"parser-ext=\"java\",\"*.java\"", ">> log_file" };
 				command = java_command;
 			} else {
-				String[] c_command = { "$SN_HOME/./snavigator", "--batchmode", "--create", "-D", "parser-ext=\"c++\",\"*.[ch]pp *.cc *.hh *.c *.h *.[ch]xx\"", ">> log_file" };
+				String[] c_command = { "$SN_HOME/./snavigator", "--batchmode", "--create", "-D", 
+						"parser-ext=\"c++\",\"*.[ch]pp *.cc *.hh *.c *.h *.[ch]xx\"", ">> log_file" };
 				command = c_command;
 			}
+			
+//			String s = "$SN_HOME/./snavigator --batchmode --create -D parser-ext="c++","*.[ch]pp *.cc *.hh *.c *.h *.[ch]xx" >> log_file",
 		} else {
 			System.out.println("Something is wrong when calculating language");
 			return false;
@@ -111,24 +113,58 @@ public class SourceNavigatorExtractor implements ExtractionMethod {
 		File targetCommit = new File(this.rootPath + this.target);
 //			read the list of file
 
-		ConsoleFactory.getConsole().run(command, null, new File(SRC_PATH + this.projectName + "/" + this.target), this.target);
+		ConsoleFactory.getConsole().run(command, null, new File(SRC_PATH + this.projectName + "/" + this.target),
+				this.target);
 		ConsoleFactory.getConsole().run(SourceNavigatorDBDumpCommand, null,
 				new File(SRC_PATH + this.projectName + "/" + this.target), this.target);
-
+		storeExtraction();
+		clearExtractionLocation();
 		return true;
 
 	}
 
 	@Override
 	public void storeExtraction() {
-		// TODO Auto-generated method stub
-
+//		System.out.println(this.rootPath + " ||||| " + this.rootPath + "/stored_" + this.target + "/");
+		MoveFilesAndFolders moveFilesAndFoldersResultsOfExtraction = new MoveFilesAndFolders(this.rootPath + "/",
+				this.rootPath + "/stored_" + this.target + "/");
+//		moveFilesAndFoldersResultsOfExtraction.move(this.target + ".rsf");
+//		moveFilesAndFoldersResultsOfExtraction.move(this.target + "_final.rsf");
+//		moveFilesAndFoldersResultsOfExtraction.move(this.target + "_names.rsf");
+//		moveFilesAndFoldersResultsOfExtraction.move(this.target + ".cdif");
+		moveFilesAndFoldersResultsOfExtraction.moveFolder(this.target + "/", "dbdump");
 	}
 
 	@Override
 	public void clearExtractionLocation() {
-		// TODO Auto-generated method stub
-
+		String deleteCommand = "rm -r ";
+		File extractionLocation = new File(PathVMRectifier.deRectify(this.rootPath));
+		for (File f : extractionLocation.listFiles())
+			if (f.getName().contains(".rsf") || f.getName().contains(".log") || f.getName().contains(".cdif"))
+				f.delete();
+		String folderTreeForDeletion = this.rootPath + "/" + this.target;
+		ConsoleFactory.getConsole().run(deleteCommand + folderTreeForDeletion, target);
+		
+//		File extractionLocation = new File(PathVMRectifier.deRectify(this.rootPath));
+//		List<String> fileToDelete = new ArrayList<>();
+//		try {
+//			Files.find(Paths.get(PathVMRectifier.deRectify(this.rootPath)), 999,
+//					(p, bfa) -> ((bfa.isRegularFile() && (p.getFileName().toString().toLowerCase().matches(".*\\.c")))
+//							|| (bfa.isDirectory())))
+//					.forEach(bfa -> fileToDelete.add(bfa.toString()));
+//			List<String> deleted = new ArrayList<String>();
+//			while (deleted.size())
+//			for (String fileName : fileToDelete) {
+//				if (new File(filename).isFile()) {
+//					new File(filename).delete();
+//					deleted.add(fileName);
+//				}
+//				
+//				
+//			}
+//		} catch (IOException ioe) {
+//			System.out.println(ioe.getMessage());
+//		}
 	}
 
 }

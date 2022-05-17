@@ -1,45 +1,54 @@
+## https://github.com/KDE/elisa
+## https://github.com/apache/forrest
+## https://github.com/KDE/konsole
+## https://github.com/KDE/dolphin
+## https://github.com/KDE/kget
+## https://github.com/KDE/kolourpaint
+## https://github.com/KDE/ruqola
+## https://github.com/KDE/ktorrent
+## https://github.com/KDE/konversation
+## https://github.com/KDE/plasma-framework
+https://github.com/KDE/kate
+https://github.com/apache/log4j
+https://github.com/KDE/konqueror
+https://github.com/apache/ant-ivy
+## https://github.com/KDE/kexi
+## https://github.com/KDE/kcontacts
+## https://github.com/KDE/kdepim-addons
+## https://github.com/KDE/gwenview
+## https://github.com/GNOME/epiphany
 ## https://github.com/django/django
 ## https://github.com/microsoft/vscode
-https://github.com/apache/yetus
+## https://github.com/apache/yetus
 ## https://github.com/KDE/kdelibs
 ## https://github.com/KDE/akonadi
 ## https://github.com/KDE/gcompris
 ## https://github.com/KDE/kstars
 ## https://github.com/KDE/digikam
-## https://github.com/KDE/kcontacts
 ## https://github.com/KDE/calligra
-https://github.com/KDE/kwin
+## https://github.com/KDE/kwin
 ## https://github.com/KDE/umbrello
 ## https://github.com/KDE/kmix
-https://github.com/KDE/kmymoney
+## https://github.com/KDE/kmymoney
 ## https://github.com/KDE/labplot
-## https://github.com/KDE/kate
-## https://github.com/KDE/konsole
-## https://github.com/KDE/konversation
 ## https://github.com/KDE/juk
 ## https://github.com/KDE/kdevelop
 ## https://github.com/KDE/ark
 ## https://github.com/KDE/plasma-nm
 ## https://github.com/KDE/marble
-## https://github.com/KDE/kget
-## https://github.com/KDE/dolphin
 ## https://github.com/KDE/kio-extras
 ## https://github.com/KDE/lokalize
 ## https://github.com/KDE/amarok
 ## https://github.com/KDE/kdevplatform
 ## https://github.com/KDE/smb4k
 ## https://github.com/KDE/plasma-desktop
-## https://github.com/KDE/ktorrent
 ## https://github.com/KDE/okular
 ## https://github.com/KDE/kompare
 ## https://github.com/KDE/k3b
-## https://github.com/KDE/gwenview
-## https://github.com/KDE/plasma-framework
 ## https://github.com/KDE/systemsettings
 ## https://github.com/KDE/clazy
 ## https://github.com/KDE/kopete
 ## https://github.com/KDE/breeze
-## https://github.com/KDE/kolourpaint
 ## https://github.com/KDE/plasma-workspace
 ## https://github.com/KDE/kio
 ## https://github.com/KDE/solid
@@ -48,7 +57,6 @@ https://github.com/KDE/kmymoney
 ## https://github.com/KDE/krita
 ## https://github.com/apple/swift
 ## https://github.com/GNOME/gtkmm
-## https://github.com/GNOME/epiphany
 ## https://github.com/GNOME/orca
 ## https://github.com/GNOME/gnome-initial-setup
 ## https://github.com/GNOME/vte
@@ -69,14 +77,12 @@ https://github.com/KDE/kmymoney
 ## https://github.com/apache/skywalking
 ## https://github.com/GNOME/balsa
 ## https://github.com/GNOME/gnome-shell
-## https://github.com/KDE/kdepim-addons
 ## https://github.com/apache/whimsy
 ## https://github.com/travis-ci/travis-web
 ## https://github.com/GNOME/polari
 ## https://github.com/KDE/messagelib
 ## https://github.com/microsoft/react-native-windows
 ## https://github.com/svn2github/vuze
-## https://github.com/KDE/kexi
 ## https://github.com/microsoft/ChakraCore
 ## https://github.com/antlr/antlr4
 ## https://github.com/apache/lucene-solr
@@ -96,7 +102,6 @@ https://github.com/KDE/kmymoney
 ## https://github.com/brave/browser-android-tabs
 ## https://github.com/docker/docker.github.io
 ## https://github.com/microsoft/mssql-jdbc
-## https://github.com/KDE/elisa
 ## https://github.com/KDE/akregator
 ## https://github.com/KDE/kmail
 ## https://github.com/KDE/kontact
@@ -104,7 +109,6 @@ https://github.com/KDE/kmymoney
 ## https://github.com/KDE/ocs-webserver
 ## https://github.com/apache/isis
 ## https://github.com/vercel/next.js
-## https://github.com/KDE/konqueror
 ## https://github.com/apache/incubator
 ## https://github.com/KDE/craft
 ## https://github.com/microsoft/DLWorkspace
@@ -116,10 +120,8 @@ https://github.com/KDE/kmymoney
 ## https://github.com/docker/docker-ce
 ## https://github.com/google/ci_edit
 ## https://github.com/coteditor/CotEditor
-## https://github.com/KDE/ruqola
 ## https://github.com/apache/cloudstack
 ## https://github.com/craigbarnes/dte
-## https://github.com/apache/forrest
 ## https://github.com/microsoft/terminal
 ## https://github.com/KDE/falkon
 ## https://github.com/facebook/react
@@ -162,7 +164,6 @@ https://github.com/KDE/kmymoney
 ## https://github.com/KDE/ktimetracker
 ## https://github.com/input-output-hk/cardano-node
 ## https://github.com/eclipse/birt
-## https://github.com/apache/ant-ivy
 ## https://github.com/apache/ant
 ## https://github.com/kubernetes/kubernetes
 ## https://github.com/apache/flink
@@ -172,7 +173,6 @@ https://github.com/KDE/kmymoney
 ## https://github.com/apache/camel
 ## https://github.com/apache/synapse
 ## https://github.com/apache/poi
-## https://github.com/apache/log4j
 ## https://github.com/microsoft/TypeScript
 ## https://github.com/apache/calcite
 ## https://github.com/twbs/bootstrap

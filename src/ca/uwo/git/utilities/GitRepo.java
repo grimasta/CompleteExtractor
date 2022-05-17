@@ -115,7 +115,7 @@ public class GitRepo {
 				this.repo = this.git.getRepository();
 			}
 			this.head = this.repo.resolve(Constants.HEAD);
-			for (RevCommit commit : this.git.log().call()) {
+			for (RevCommit commit : this.git.log().all().call()) {
 
 				this.listOfCommits.add(commit);
 			}
@@ -136,7 +136,7 @@ public class GitRepo {
 			System.out.println("stored in : " + this.rootPath + " and " + this.strPath);
 			if (Files.exists(path)) {
 				System.out.println("Deleting existing copy");
-				ConsoleFactory.getConsole().run(DynamicCommands.getDynamicDelete() + " /vagrant/ExtractorUtilities/projects_extracted/" + this.getProjectName());
+				ConsoleFactory.getConsole().run(DynamicCommands.getDynamicDelete() + " /vagrant/ExtractorUtilities/projects_extracted/" + this.getProjectName(), this.getCurrentCommitName());
 				this.initializeGitRepo();
 			} else {
 				System.out.println("GitAPIError" + gapie.getMessage());
@@ -367,7 +367,6 @@ public class GitRepo {
 			return changes;
 		}
 	}
-
 	
 	public boolean currentCommitIsMerge() {
 		if (this.currentCommit.getParentCount() > 1)
