@@ -1,39 +1,28 @@
 package ca.uwo.git.utilities;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import extractorUtilities.Extractor;
-import facades.CcccFacade;
-import facades.EodFacade;
 import facades.ExtractionFacade;
-import facades.FacadeFactory;
-import facades.FacadeType;
-import facades.FetchFacade;
-import facades.IdsFacade;
-import facades.MultimetricFacade;
 import facades.ProxyFacade;
-import facades.SrcMLFacade;
 import fileOperationUtilities.InitializeFolderStructure;
-import fileOperationUtilities.MoveFilesAndFolders;
-import paths.DynamicPaths;
 
 public class Main {
 	private static boolean debug = false;
 	private static final Logger logger = LogManager.getLogger(Main.class);
 
 	public static void main(String[] args) {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+		LocalDateTime now = LocalDateTime.now();
+		System.out.println("started at " + dtf.format(now));
 //		try {
 //		Runtime thisRuntime = Runtime.getRuntime();
 //		Process executionProcess = thisRuntime
@@ -76,6 +65,9 @@ public class Main {
 		proxy.setBufferedReader(br);
 		proxy.doExtraction();
 		System.out.println("Done");
+		dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+		now = LocalDateTime.now();
+		System.out.println("finished at " + dtf.format(now));
 
 	}
 
