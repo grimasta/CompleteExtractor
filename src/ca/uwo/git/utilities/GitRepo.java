@@ -377,7 +377,7 @@ public class GitRepo {
 
 	public boolean checkoutNextCommit() {
 		try {
-			this.git.checkout().setForceRefUpdate(true).setName(this.currentCommit.getName()).call();
+			this.git.checkout().setAllPaths(true).setForceRefUpdate(true).setName(this.currentCommit.getName()).call();
 //			SimpleDateFormat originalFormat = new SimpleDateFormat("yyyyMMdd:HH:mm:ss");
 			this.currentCommitDate = this.currentCommit.getCommitTime() * 1000L;
 			// System.out.println(originalFormat.format(this.currentCommitDate));
