@@ -99,19 +99,14 @@ public class MoveFilesAndFolders {
 		String sourcePathIncremental = sourceParts[0] + "/" + sourceParts[1] + "/";
 		int i = 2;
 		while (i < sourceParts.length - 1) {
-			if (sourceParts[i].contains(" ")) {
-				System.out.println("Found a filename containing a space in it and appropriately made it work using single quotes");
-				sourcePathIncremental += "\'" + sourceParts[i] + "\'/";
-			} else
 				sourcePathIncremental += sourceParts[i] + "/";
 			i++;
 			if (Files.notExists(Paths.get(PathVMRectifier.deRectify(sourcePathIncremental)))) {
 				mkdir(sourcePathIncremental);
 			}
 		}
-		if (fileName.contains(" "))
-			target = this.destinationPath + "\'" + fileName + "\'"; 
-//		System.out.println(source + " -> " + target);
+		source = source.replaceAll(" ", "\\ ");
+		target = target.replaceAll(" ", "\\ ");
 		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicCopy() + source + " " + target, currentCommitID);
 	}
 
