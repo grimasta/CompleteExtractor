@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import configurations.RunConfiguration;
 import console.commanders.ConsoleFactory;
 import fileOperationUtilities.PathVMRectifier;
 import paths.DynamicPaths;
@@ -91,7 +92,7 @@ public class MultimetricExtractor implements ExtractionMethod {
 			BufferedWriter scriptWriter = new BufferedWriter(new FileWriter(multimetricScript)); 
 			scriptWriter.write("#!/bin/bash\n"
 					+ "\n"
-					+ "multimetric `cat /vagrant/ExtractorUtilities/scripts/list_of_files_for_" + this.target + "` > /vagrant/ExtractorUtilities/multimetric/" + this.projectName + "/" + this.target + ".json");
+					+ "multimetric `cat /vagrant/ExtractorUtilities/scripts/list_of_files_for_" + this.target + "` > /vagrant/ExtractorUtilities/multimetric/" + RunConfiguration.SELECTED_COMMITS + "/" + this.projectName + "/" + this.target + ".json");
 			String multimetricCommand = "/vagrant/ExtractorUtilities/scripts/run_multimetric_for_" + this.target + ".sh";
 			scriptWriter.close();
 			
