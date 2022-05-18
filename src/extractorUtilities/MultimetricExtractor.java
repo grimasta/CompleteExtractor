@@ -133,7 +133,7 @@ public class MultimetricExtractor implements ExtractionMethod {
 
 	public void storeExtraction() {
 		// this.rootPath;
-		String PathToStore = DynamicPaths.getPath() + "multimetric/" + this.projectName + "/";
+		String PathToStore = DynamicPaths.getPath() + "multimetric/" + RunConfiguration.SELECTED_COMMITS + "/" + this.projectName + "/";
 		File storage = new File(PathToStore);
 		if (!storage.exists())
 			storage.mkdirs();
