@@ -9,7 +9,7 @@ public enum ExtractorType {
 		MULTIMETRIC("multimetric"),
 		SRCML("srcml"),
 		FINALISATION("finalize"),
-		SNAVIGATOR("snavigator");
+		SNAVIGATOR("increments");
 		
 		public final String label;
 		

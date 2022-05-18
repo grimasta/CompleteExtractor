@@ -113,6 +113,8 @@ public class SourceNavigatorExtractor implements ExtractionMethod {
 		File targetCommit = new File(this.rootPath + this.target);
 //			read the list of file
 
+		
+		ConsoleFactory.getConsole().run("Xvfb :1 -screen 0 1024x768x16 &", this.target);
 		ConsoleFactory.getConsole().run(command, null, new File(SRC_PATH + this.projectName + "/" + this.target),
 				this.target);
 		ConsoleFactory.getConsole().run(SourceNavigatorDBDumpCommand, null,
