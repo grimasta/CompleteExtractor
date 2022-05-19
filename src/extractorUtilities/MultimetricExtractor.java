@@ -77,7 +77,8 @@ public class MultimetricExtractor implements ExtractionMethod {
 						line.toLowerCase().endsWith(".rb") || line.toLowerCase().endsWith(".js") ||
 						line.toLowerCase().endsWith(".go") || line.toLowerCase().endsWith(".sh")) {
 					if (line.toLowerCase().contains(" "))
-						line = line.replaceAll("\\s+", "\\\\ ");
+						continue;
+//						line = line.replaceAll("\\s+", "\\ ");
 					//				filter out all files that are not c or cpp source or header files as well java source files
 					multimetricInput += " " + line;
 				}
