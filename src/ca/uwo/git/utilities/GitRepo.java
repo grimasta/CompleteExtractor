@@ -375,45 +375,45 @@ public class GitRepo {
 			return false;
 	}
 
-	public boolean checkoutNextCommit() {
+	public boolean checkoutNextCommit1() {
 		try {
 			this.git.checkout().setForced(true).setForceRefUpdate(true).setName(this.currentCommit.getName()).call();
-//			SimpleDateFormat originalFormat = new SimpleDateFormat("yyyyMMdd:HH:mm:ss");
 			this.currentCommitDate = this.currentCommit.getCommitTime() * 1000L;
-			// System.out.println(originalFormat.format(this.currentCommitDate));
-
-//			Stream<Path> walk = Files.walk(Paths.get(rootPath + this.strPath));
-//			List<String> result = walk.filter(Files::isRegularFile).map(x -> x.toString()).collect(Collectors.toList());
-
-//			List<String> filteredList = result.stream().filter(res -> !res.contains(".git"))
-//					.collect(Collectors.toList());
-
-			// System.out.println("commit at : " +
-			// originalFormat.format(currentCommit.getCommitTime() * 1000L) + " | "
-			// + currentCommit.getName() + " : " + filteredList.size());
-
-		} catch (GitAPIException gapie) {
-			System.out.println(
-					"GitAPIException caught in Method GitRepo.checkoutNextCommit. Message = " + gapie.getMessage());
-			if (gapie.getMessage().contains("Checkout conflict with files")) {
-				try {
-					this.git.stashCreate().call();
-					this.checkoutNextCommit();
-				} catch (GitAPIException gapie2) {
-					System.out.println("Failed again, resetting and exiting");
-					this.resetToHead();
-					return false;
-				}
-				
+			return true;
+		} catch(NullPointerException gapie) {
+			System.out.println("Null pointer exception caught in Method GitRepo.checkoutNextCommit1. Message = " + gapie.getMessage());
+			System.out.println("For system = " + this.getProjectName());
+			if (this.hasNext()) {
+				this.moveToNextCommit();
+				return this.checkoutNextCommit();
+			} else {
+				this.resetToHead();
+				return false;
 			}
-			return false;
-//		} catch (IOException ioe) {
-//			System.out
-//					.println("IOException caught in Methods GitRepo.checkoutNextCommit. Message = " + ioe.getMessage());
+		} catch(GitAPIException gapie) {
+			System.out.println("GitAPIException caught in Method GitRepo.checkoutNextCommit1. Message = " + gapie.getMessage());
+			System.out.println("For system = " + this.getProjectName());
+			if (this.hasNext()) {
+				this.moveToNextCommit();
+				return this.checkoutNextCommit();
+			} else {
+				this.resetToHead();
+				return false;
+			}
 		}
-		return true;
-
 	}
+	
+	public boolean checkoutNextCommit() {
+		try {
+			this.git.checkout().setForceRefUpdate(true).setName(this.currentCommit.getName()).call();
+			this.currentCommitDate = this.currentCommit.getCommitTime() * 1000L;
+			return true;
+		} catch (GitAPIException gapie) {
+			System.out.println("GitAPIException caught in Method GitRepo.checkoutNextCommit. Message = " + gapie.getMessage());
+			return this.checkoutNextCommit1();
+		}
+	}
+			
 
 	public void mergeAverage() {
 		int sum = 0;
