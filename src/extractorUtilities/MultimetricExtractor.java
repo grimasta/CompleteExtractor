@@ -77,7 +77,7 @@ public class MultimetricExtractor implements ExtractionMethod {
 						line.toLowerCase().endsWith(".rb") || line.toLowerCase().endsWith(".js") ||
 						line.toLowerCase().endsWith(".go") || line.toLowerCase().endsWith(".sh")) {
 					if (line.toLowerCase().contains(" "))
-						line = line.replaceAll(" ", "\\ ");
+						line = line.replaceAll("\\s+", "\\\\ ");
 					//				filter out all files that are not c or cpp source or header files as well java source files
 					multimetricInput += " " + line;
 				}
@@ -112,8 +112,7 @@ public class MultimetricExtractor implements ExtractionMethod {
 		}
 		return true;
 	}
-
-
+	
 //	public boolean doExtraction(String language){
 //		System.out.println("target = " + this.target);
 //		String fetchScript = "/home/or10n/extractor/fetch-Java/scripts/" + language + "2rsf.sh";
