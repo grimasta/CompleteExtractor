@@ -62,6 +62,12 @@ public class GitRepo {
 	private static final Logger logger = LogManager.getLogger(Git.class);
 	private PrintWriter DataWriter = null;
 	private int thread_ID = 1;
+	private int skipped = 0;
+	
+	
+	public int getSkipped() {
+		return skipped;
+	}
 
 	public PrintWriter getDataWriter() {
 		return DataWriter;
@@ -384,6 +390,7 @@ public class GitRepo {
 			System.out.println("Null pointer exception caught in Method GitRepo.checkoutNextCommit1. Message = " + gapie.getMessage());
 			System.out.println("For system = " + this.getProjectName());
 			if (this.hasNext()) {
+				this.skipped++;
 				this.moveToNextCommit();
 				return this.checkoutNextCommit();
 			} else {
@@ -394,6 +401,7 @@ public class GitRepo {
 			System.out.println("GitAPIException caught in Method GitRepo.checkoutNextCommit1. Message = " + gapie.getMessage());
 			System.out.println("For system = " + this.getProjectName());
 			if (this.hasNext()) {
+				this.skipped++;
 				this.moveToNextCommit();
 				return this.checkoutNextCommit();
 			} else {
