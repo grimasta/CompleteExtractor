@@ -84,8 +84,7 @@ public class SourceNavigatorExtractor implements ExtractionMethod {
 //		language = checkLanguage();
 		if (language != "none") {
 			if (language.equals("java")) {
-				String[] java_command = { "$SN_HOME/./snavigator", "--batchmode", "--create", "-D",
-						"parser-ext=\"java\",\"*.java\"", ">> log_file" };
+				String[] java_command = { "$SN_HOME/./snavigator", "--batchmode", "--create", "-D", "parser-ext=\"java\",\"*.java\"", ">> log_file" };
 				command = java_command;
 			} else {
 				String[] c_command = { "$SN_HOME/./snavigator", "--batchmode", "--create", "-D", 

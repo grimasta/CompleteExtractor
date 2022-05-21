@@ -18,11 +18,13 @@ public class RunConfiguration {
 //			ExtractorType.FETCH,
 //			ExtractorType.FINALISATION,
 //			ExtractorType.IDS,
-//			ExtractorType.MULTIMETRIC,
-			ExtractorType.SNAVIGATOR,
+			ExtractorType.MULTIMETRIC,
+//			ExtractorType.SNAVIGATOR,
+//			ExtractorType.JASOME,
 //			ExtractorType.SRCML,
 //			ExtractorType.FINALISATION
 	};
+	
 	private static boolean b = Collections.addAll(EXTRACTOR_TYPES, a);
 	
 	public static String getVagrantSshScriptLocation() {
