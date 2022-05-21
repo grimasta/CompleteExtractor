@@ -69,8 +69,11 @@ public class SshConsole implements Console {
 
 //	unused
 	public int run(String command, String[] envp, File dir, String target) {
+		int retries = 4;
+		int currentTry = 0;
 		Runtime thisRuntime = Runtime.getRuntime();
 		try {
+			String scriptWindowsFilePath = "../../ExtractorUtilities/scripts/run_script_" + target + ".sh";
 			File scriptFileDescriptor = new File("../../ExtractorUtilities/scripts/run_script_" + target + ".sh");
 			BufferedWriter bw = new BufferedWriter(new FileWriter(scriptFileDescriptor));
 			System.out.println(dir.getAbsolutePath());
@@ -79,19 +82,53 @@ public class SshConsole implements Console {
 			for (int i = 1; i < Parts.length; i++)
 				pwd += "/" + Parts[i];
 			bw.write("cd " + pwd + "\n");
-			bw.write(command);
-			System.out.println("command running with environment variable: " + command);
+			bw.write(command+"\n");
+			bw.write("vagrant\n");
 			bw.close();
-			Process executionProcess = thisRuntime
-					.exec("cmd /c ..\\\\..\\\\bash_script.bat");
+			String bashScriptPath = "../../bash_script" + target + ".bat"; 
+			File bashScript = new File(bashScriptPath);
+			BufferedWriter bashScriptWriter = new BufferedWriter(new FileWriter(bashScript));
+			bashScriptWriter.write("ssh -F " + RunConfiguration.getVagrantSshScriptLocation() + " default \"bash --login -c 'bash " + PathVMRectifier.rectify(scriptWindowsFilePath) + "'\"");
+			bashScriptWriter.close();
+			Process executionProcess = thisRuntime.
+					exec("cmd /c " + "..\\\\..\\\\bash_script" + target + ".bat");
 			executionProcess.waitFor();
-			BufferedReader br = new BufferedReader(new InputStreamReader(executionProcess.getInputStream()));
-			String s;
-			while ((s = br.readLine()) != null)
-				System.out.println("command running with environment variable Output : " + s);
-			if (executionProcess.exitValue() != 0)
-				System.out.println("command running with environment variable Command : " + command
-						+ " ||| exited with code : " + executionProcess.exitValue() + target);
+			
+			currentTry++;
+			while (executionProcess.exitValue() != 0) {
+				if (currentTry < retries) {
+					try {
+						Thread.sleep(1000*currentTry);
+					} catch (InterruptedException ie) {
+						System.out.println(ie.getMessage());
+					}
+					currentTry ++;
+					executionProcess = thisRuntime.
+							exec("cmd /c " + "..\\\\..\\\\bash_script" + target + ".bat");
+					executionProcess.waitFor();
+				} else
+					break;
+			}
+			
+//			executionProcess.waitFor();
+//			Process executionProcess = thisRuntime.exec(command, envp, dir);
+//			BufferedReader br = new BufferedReader(new InputStreamReader(executionProcess.getInputStream()));
+//			String s;
+//			while ((s = br.readLine()) != null)
+//				System.out.println("Output : " + s);
+			if (executionProcess.exitValue() != 0) {
+				BufferedReader br = new BufferedReader(new InputStreamReader(executionProcess.getInputStream()));
+				String s;
+				while ((s = br.readLine()) != null)
+					System.out.println("Output : " + s);
+//				System.out.print("Command : ");
+//				for (String sss : command)
+//					System.out.print(s + "\t");
+				System.out.println(" ||| exited with code : " + executionProcess.exitValue());
+				return executionProcess.exitValue();
+			}
+			bashScript.delete();
+			scriptFileDescriptor.delete();
 			return executionProcess.exitValue();
 		} catch (IOException ioe) {
 			System.out.println("exception raised when executing command running with environment variable : ");
