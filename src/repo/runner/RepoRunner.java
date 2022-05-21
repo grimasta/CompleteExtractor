@@ -93,6 +93,7 @@ public class RepoRunner implements Runnable {
 				}
 //				System.out.println(gitRepo.getCurrentCommitName());
 				if (gitRepo.checkoutNextCommit()) {
+
 					for (MoveFilesAndFolders mfaf : this.moverUtilities) {
 						MoveFilesAndFolders moveFilesAndFoldersOfCommit = mfaf.getNewInstance(gitRepo.getProjectPath(),
 								gitRepo.getRootPath().replace("/projects_extracted", "") + "increments/"
@@ -103,7 +104,6 @@ public class RepoRunner implements Runnable {
 						// temporary location to run the extractor on
 						moveFilesAndFoldersOfCommit.moveAllFromMap();
 					}
-
 					// initialize an extractor for this commit
 					for (ExtractionMethod em : this.extractionMethods) {
 						if (em.getNewInstance(gitRepo.getCurrentCommitName(),
