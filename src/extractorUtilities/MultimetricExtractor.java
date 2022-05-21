@@ -87,7 +87,7 @@ public class MultimetricExtractor implements ExtractionMethod {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(new File(PathVMRectifier.deRectify(list_of_files_path))));
 			bw.write(multimetricInput);
 			bw.close();
-			new File(DynamicPaths.getPath() + "multimetric/" + this.projectName + "/").mkdirs();
+			new File(DynamicPaths.getPath() + "multimetric/"  + RunConfiguration.SELECTED_COMMITS + "/" + this.projectName + "/").mkdirs();
 //			System.out.println("before multimetric command");
 //			String[] ccccCommand = new String[] { "/bin/bash", "-c", "./run_multimetric.sh" };
 			File multimetricScript = new File(DynamicPaths.getPath() + "scripts/run_multimetric_for_" + this.target + ".sh");
