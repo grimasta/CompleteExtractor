@@ -63,8 +63,8 @@ public class GitRepo {
 	private PrintWriter DataWriter = null;
 	private int thread_ID = 1;
 	private int skipped = 0;
-	
-	
+	private int retries = 0;
+
 	public int getSkipped() {
 		return skipped;
 	}
@@ -72,7 +72,7 @@ public class GitRepo {
 	public PrintWriter getDataWriter() {
 		return DataWriter;
 	}
-	
+
 	public GitRepo(String URL) {
 		logger.always().log("initialised a GitRepo Class for repository: " + URL);
 		this.URL = URL;
@@ -82,8 +82,8 @@ public class GitRepo {
 			if ((new File("../../commit_level_data/" + this.strPath.replace("/", "") + "_commits.csv")).exists()) {
 				(new File("../../commit_level_data/" + this.strPath.replace("/", "") + "_commits.csv")).delete();
 			}
-			this.DataWriter = new PrintWriter(
-					new BufferedWriter(new FileWriter("../../commit_level_data/" + this.strPath.replace("/", "") + "_commits.csv", true)));
+			this.DataWriter = new PrintWriter(new BufferedWriter(
+					new FileWriter("../../commit_level_data/" + this.strPath.replace("/", "") + "_commits.csv", true)));
 			String headerString = "commitId,commitMessage,committed_at,committer_email,committer_id,committer_name,committer_id,"
 					+ "committer_name,author_email,author_id,author_name,file_name,file_added,file_deleted, commit_added, commit_deleted";
 			this.DataWriter.println(headerString);
@@ -91,12 +91,18 @@ public class GitRepo {
 			System.out.println("error trying to open " + this.strPath.replace("/", "") + "_commits.csv file");
 		}
 	}
-	
+
 	public GitRepo copy(int thread_ID) {
 		GitRepo copy = new GitRepo(this.URL);
 		copy.thread_ID = thread_ID;
 		copy.strPath += copy.thread_ID;
 		return copy;
+	}
+
+	public void deleteRepo() {
+		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicDelete()
+				+ " /vagrant/ExtractorUtilities/projects_extracted/" + this.getProjectName(),
+				"delete_" + this.getProjectName());
 	}
 
 	public void initializeGitRepo() {
@@ -142,7 +148,7 @@ public class GitRepo {
 			System.out.println("stored in : " + this.rootPath + " and " + this.strPath);
 			if (Files.exists(path)) {
 				System.out.println("Deleting existing copy");
-				ConsoleFactory.getConsole().run(DynamicCommands.getDynamicDelete() + " /vagrant/ExtractorUtilities/projects_extracted/" + this.getProjectName(), this.getCurrentCommitName());
+				this.deleteRepo();
 				this.initializeGitRepo();
 			} else {
 				System.out.println("GitAPIError" + gapie.getMessage());
@@ -206,7 +212,7 @@ public class GitRepo {
 	public void write(String outputString) {
 		this.DataWriter.print(outputString);
 	}
-	
+
 	private class Change {
 
 	}
@@ -355,25 +361,27 @@ public class GitRepo {
 		}
 		return allCommitNames;
 	}
-	
-	public List<DiffEntry> getChangedFilesId(){
+
+	public List<DiffEntry> getChangedFilesId() {
 		List<DiffEntry> changes = new ArrayList<>();
 		try {
 			changes = this.calculateDiffs();
 			return changes;
 
 		} catch (GitAPIException gapie) {
-			System.out.println("GitAPIException caught in method GitRepo.getChangedFiles, Full Message : " + gapie.getMessage());
+			System.out.println(
+					"GitAPIException caught in method GitRepo.getChangedFiles, Full Message : " + gapie.getMessage());
 			return changes;
 		} catch (IncorrectObjectTypeException iote) {
-			System.out.println("IncorectObjectTypeException caught in Method GitRepo.getChangedFiles. Message = " + iote.getMessage());
+			System.out.println("IncorectObjectTypeException caught in Method GitRepo.getChangedFiles. Message = "
+					+ iote.getMessage());
 			return changes;
 		} catch (IOException e) {
 			System.out.println("IOException caught in Method GitRepo.getChangedFiles. Message = " + e.getMessage());
 			return changes;
 		}
 	}
-	
+
 	public boolean currentCommitIsMerge() {
 		if (this.currentCommit.getParentCount() > 1)
 			return true;
@@ -381,47 +389,62 @@ public class GitRepo {
 			return false;
 	}
 
-	public boolean checkoutNextCommit1() {
-		try {
-			this.git.checkout().setForced(true).setForceRefUpdate(true).setName(this.currentCommit.getName()).call();
-			this.currentCommitDate = this.currentCommit.getCommitTime() * 1000L;
-			return true;
-		} catch(NullPointerException gapie) {
-			System.out.println("Null pointer exception caught in Method GitRepo.checkoutNextCommit1. Message = " + gapie.getMessage());
-			System.out.println("For system = " + this.getProjectName());
-			if (this.hasNext()) {
-				this.skipped++;
-				this.moveToNextCommit();
-				return this.checkoutNextCommit();
-			} else {
-				this.resetToHead();
-				return false;
-			}
-		} catch(GitAPIException gapie) {
-			System.out.println("GitAPIException caught in Method GitRepo.checkoutNextCommit1. Message = " + gapie.getMessage());
-			System.out.println("For system = " + this.getProjectName());
-			if (this.hasNext()) {
-				this.skipped++;
-				this.moveToNextCommit();
-				return this.checkoutNextCommit();
-			} else {
-				this.resetToHead();
-				return false;
-			}
-		}
-	}
-	
+//	public boolean checkoutNextCommit1() {
+//		try {
+//			this.git.checkout().setForced(true).setForceRefUpdate(true).setName(this.currentCommit.getName()).call();
+//			this.currentCommitDate = this.currentCommit.getCommitTime() * 1000L;
+//			return true;
+//		} catch(NullPointerException gapie) {
+//			System.out.println("Null pointer exception caught in Method GitRepo.checkoutNextCommit1. Message = " + gapie.getMessage());
+//			System.out.println("For system = " + this.getProjectName());
+//			if (this.hasNext()) {
+//				this.skipped++;
+//				this.moveToNextCommit();
+//				return this.checkoutNextCommit();
+//			} else {
+//				this.resetToHead();
+//				return false;
+//			}
+//		} catch(GitAPIException gapie) {
+//			System.out.println("GitAPIException caught in Method GitRepo.checkoutNextCommit1. Message = " + gapie.getMessage());
+//			System.out.println("For system = " + this.getProjectName());
+//			if (this.hasNext()) {
+//				this.skipped++;
+//				this.moveToNextCommit();
+//				return this.checkoutNextCommit();
+//			} else {
+//				this.resetToHead();
+//				return false;
+//			}
+//		}
+//	}
+
 	public boolean checkoutNextCommit() {
 		try {
 			this.git.checkout().setForceRefUpdate(true).setName(this.currentCommit.getName()).call();
 			this.currentCommitDate = this.currentCommit.getCommitTime() * 1000L;
 			return true;
 		} catch (GitAPIException gapie) {
-			System.out.println("GitAPIException caught in Method GitRepo.checkoutNextCommit. Message = " + gapie.getMessage());
-			return this.checkoutNextCommit1();
+			if (this.retries == 1000) {
+				return false;
+			}
+			System.out.println(
+					"GitAPIException caught in Method GitRepo.checkoutNextCommit. Message = " + gapie.getMessage());
+			String problemCommit = this.currentCommit.getName();
+			System.out.println("Trying to resolve by redownloading REPO");
+			this.retries++;
+			this.deleteRepo();
+			this.initializeGitRepo();
+			while (hasNext()) {
+				this.moveToNextCommit();
+				if (this.currentCommit.getName().equals(problemCommit))
+					break;
+			}
+			this.checkoutNextCommit();
+			System.out.println("Resolved");
+			return true;
 		}
 	}
-			
 
 	public void mergeAverage() {
 		int sum = 0;
@@ -463,7 +486,7 @@ public class GitRepo {
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(this.currentCommitDate);
 		c.add(Calendar.HOUR, 4);
-		
+
 //		System.out.println(originalFormat.format(this.currentCommitDate) + "+00:00    " + this.currentCommit.getName());
 		return originalFormat.format(c.getTimeInMillis()) + "+00:00";
 	}
@@ -489,4 +512,15 @@ public class GitRepo {
 		return rootPath;
 	}
 
+	public boolean checkoutByName(String commitId) {
+		try {
+			this.git.checkout().setForceRefUpdate(true).setName(commitId).call();
+//			this.currentCommitDate = this.currentCommit.getCommitTime() * 1000L;
+			return true;
+		} catch (GitAPIException gapie) {
+			System.out.println("GitAPIException caught in Method GitRepo.checkoutNextCommit. Message = "
+					+ gapie.getMessage() + " at " + commitId);
+			return false;
+		}
+	}
 }
