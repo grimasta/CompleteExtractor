@@ -99,10 +99,18 @@ public class GitRepo {
 		return copy;
 	}
 
+
+	public static void main(String[] args){
+		String pla = "ruqola\\";
+		System.out.println(pla.replace("\\", ""));
+	}
+	
 	public void deleteRepo() {
+		this.git.close();
+		String projectName = this.getProjectName().replace("/","");
 		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicDelete()
-				+ " /vagrant/ExtractorUtilities/projects_extracted/" + this.getProjectName(),
-				"delete_" + this.getProjectName());
+				+ " /vagrant/ExtractorUtilities/projects_extracted/" + projectName,
+				"delete_" + projectName);
 	}
 
 	public void initializeGitRepo() {
