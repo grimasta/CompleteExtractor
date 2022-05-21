@@ -12,6 +12,7 @@ public class ExtractorFactory {
 		case MULTIMETRIC: return new MultimetricExtractor();
 		case SNAVIGATOR: return new SourceNavigatorExtractor();
 		case SRCML: return new SrcMLExtractor();
+		case JASOME: return new JasomeExtractor();
 		default:
 			System.out.println("In the configuration file an illegal ExtractorType was used, program will now exit");
 			System.exit(-1);
