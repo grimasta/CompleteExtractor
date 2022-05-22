@@ -167,6 +167,10 @@ public class GitRepo {
 				System.out.println("Deleting existing copy");
 				String projectName = this.getProjectName().replace("/", "");
 				File file = new  File("../../ExtractorUtilities/projects_extracted/" + projectName);
+				this.git.close();
+				this.repo.close();
+				this.git = null;
+				this.repo = null;
 				this.deleteRepo(file);
 				this.initializeGitRepo();
 			} else {
@@ -424,6 +428,10 @@ public class GitRepo {
 			this.retries++;
 			String projectName = this.getProjectName().replace("/", "");
 			File file = new  File("../../ExtractorUtilities/projects_extracted/" + projectName);
+			this.git.close();
+			this.repo.close();
+			this.git = null;
+			this.repo = null;
 			this.deleteRepo(file);
 			this.initializeGitRepo();
 			while (hasNext()) {
