@@ -99,18 +99,27 @@ public class GitRepo {
 		return copy;
 	}
 
-
-	public static void main(String[] args){
+	public static void main(String[] args) {
 		String pla = "ruqola\\";
 		System.out.println(pla.replace("\\", ""));
 	}
-	
-	public void deleteRepo() {
-		this.git.close();
-		String projectName = this.getProjectName().replace("/","");
-		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicDelete()
-				+ " /vagrant/ExtractorUtilities/projects_extracted/" + projectName,
-				"delete_" + projectName);
+
+	public void deleteRepo(File file) {
+		try {
+		if (file.isDirectory()) {
+		    File[] entries = file.listFiles();
+		    if (entries != null) {
+		      for (File entry : entries) {
+		        deleteRepo(entry);
+		      }
+		    }
+		  }
+		  if (!file.delete()) {
+		    throw new IOException("Failed to delete " + file);
+		  }
+		} catch(IOException ioe) {
+			System.out.println("error when deleting bad repo = " + ioe.getMessage());
+		}
 	}
 
 	public void initializeGitRepo() {
@@ -120,7 +129,7 @@ public class GitRepo {
 //			System.out.println("stored in : " + this.rootPath + " and " + this.strPath);
 			if (Files.exists(path)) {
 				this.git = Git.open(new File(rootPath + this.strPath + ".git"));
-				this.git.checkout();
+//				this.git.checkout();
 				this.repo = this.git.getRepository();
 			} else {
 				System.out.println("started pulling : " + this.strPath);
@@ -156,7 +165,9 @@ public class GitRepo {
 			System.out.println("stored in : " + this.rootPath + " and " + this.strPath);
 			if (Files.exists(path)) {
 				System.out.println("Deleting existing copy");
-				this.deleteRepo();
+				String projectName = this.getProjectName().replace("/", "");
+				File file = new  File("../../ExtractorUtilities/projects_extracted/" + projectName);
+				this.deleteRepo(file);
 				this.initializeGitRepo();
 			} else {
 				System.out.println("GitAPIError" + gapie.getMessage());
@@ -397,36 +408,6 @@ public class GitRepo {
 			return false;
 	}
 
-//	public boolean checkoutNextCommit1() {
-//		try {
-//			this.git.checkout().setForced(true).setForceRefUpdate(true).setName(this.currentCommit.getName()).call();
-//			this.currentCommitDate = this.currentCommit.getCommitTime() * 1000L;
-//			return true;
-//		} catch(NullPointerException gapie) {
-//			System.out.println("Null pointer exception caught in Method GitRepo.checkoutNextCommit1. Message = " + gapie.getMessage());
-//			System.out.println("For system = " + this.getProjectName());
-//			if (this.hasNext()) {
-//				this.skipped++;
-//				this.moveToNextCommit();
-//				return this.checkoutNextCommit();
-//			} else {
-//				this.resetToHead();
-//				return false;
-//			}
-//		} catch(GitAPIException gapie) {
-//			System.out.println("GitAPIException caught in Method GitRepo.checkoutNextCommit1. Message = " + gapie.getMessage());
-//			System.out.println("For system = " + this.getProjectName());
-//			if (this.hasNext()) {
-//				this.skipped++;
-//				this.moveToNextCommit();
-//				return this.checkoutNextCommit();
-//			} else {
-//				this.resetToHead();
-//				return false;
-//			}
-//		}
-//	}
-
 	public boolean checkoutNextCommit() {
 		try {
 			this.git.checkout().setForceRefUpdate(true).setName(this.currentCommit.getName()).call();
@@ -441,7 +422,9 @@ public class GitRepo {
 			String problemCommit = this.currentCommit.getName();
 			System.out.println("Trying to resolve by redownloading REPO");
 			this.retries++;
-			this.deleteRepo();
+			String projectName = this.getProjectName().replace("/", "");
+			File file = new  File("../../ExtractorUtilities/projects_extracted/" + projectName);
+			this.deleteRepo(file);
 			this.initializeGitRepo();
 			while (hasNext()) {
 				this.moveToNextCommit();
