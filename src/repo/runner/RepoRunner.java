@@ -65,7 +65,7 @@ public class RepoRunner implements Runnable {
 		if (threads == 0) {
 			gitRepo.initializeGitRepo();
 			List<String> selectedFromYear;
-			File alreadydone = new File(DynamicPaths.getPath() + RunConfiguration.EXTRACTOR_TYPES.get(0) + "/" + RunConfiguration.SELECTED_COMMITS + "/" + gitRepo.getProjectName());
+			File alreadydone = new File(DynamicPaths.getPath() + RunConfiguration.EXTRACTOR_TYPES.get(0).label + "/" + RunConfiguration.SELECTED_COMMITS + "/" + gitRepo.getProjectName());
 			if (!alreadydone.exists())
 				alreadydone.mkdirs();
 			List<String> listofDone = new ArrayList<>();
