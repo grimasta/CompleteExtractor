@@ -77,10 +77,17 @@ public class RepoRunner implements Runnable {
 				selectedFromYear = gitRepo.getAllCommitNamesForYear(RunConfiguration.SELECTED_YEARS);
 				commitSelection.setYearlySelectedCommits(selectedFromYear);
 			}
+			for (String s : listofDone) {
+				if (!commitSelection.contains(s))
+					new File(alreadydone + "\\" + s + ".json").delete();
+			}
 			System.out.println(gitRepo.getProjectName() + " has a total of " + gitRepo.getAllCommitNames().size());
 			String language = this.checkLanguage();
 			if (language == "none")
 				return;
+			
+			
+			
 			while (gitRepo.hasNext() && !ProxyFacade.stop.get("stop")) {
 
 				// checkout the next commit in the repo
@@ -88,7 +95,7 @@ public class RepoRunner implements Runnable {
 				if (!commitSelection.contains(gitRepo.getCurrentCommitName())) {
 					continue;
 				}
-				if (listofDone.contains(gitRepo.getCurrentCommitName()) || gitRepo.currentCommitIsMerge()) {
+				if (listofDone.contains(gitRepo.getCurrentCommitName())) {
 					continue;
 				}
 //				System.out.println(gitRepo.getCurrentCommitName());
