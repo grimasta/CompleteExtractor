@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +60,16 @@ public class RepoRunner implements Runnable {
 		stop = true;
 	}
 
+	private void delete(String folder) {
+		
+		for (File file : new File(folder + "dbdump\\").listFiles()) {
+			file.delete();
+		}
+		new File(folder + "dbdump").delete();
+		new File(folder).delete();
+	}
+	
+	
 //	TODO differentiate commands to the commit id level so that they can be run in parallel
 	@Override
 	public void run() {
@@ -78,8 +89,15 @@ public class RepoRunner implements Runnable {
 				commitSelection.setYearlySelectedCommits(selectedFromYear);
 			}
 			for (String s : listofDone) {
-				if (!commitSelection.contains(s))
-					new File(alreadydone + "\\" + s + ".json").delete();
+				if (!commitSelection.contains(s)) {
+					Path path = Paths.get(alreadydone + "\\" + s + ".json");
+					File uselessFileOrFolder = new File(path.toString());
+					if (!Files.exists(path)) {
+						this.delete(alreadydone + "\\stored_" + s + "\\");
+					}else
+						uselessFileOrFolder.delete();
+					
+				}
 			}
 			System.out.println(gitRepo.getProjectName() + " has a total of " + gitRepo.getAllCommitNames().size());
 			String language = this.checkLanguage();
