@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Set;
 
 import configurations.RunConfiguration;
+import paths.LinuxPaths;
+import paths.WindowsPaths;
 
 public class CommitSelection {
 
@@ -21,9 +23,12 @@ public class CommitSelection {
 		currentCollection.clear();
 		try {
 			projectName = projectName.replace("/", "");
-			BufferedReader br = new BufferedReader(
-					new FileReader(new File("..\\..\\ExtractorUtilities\\selected_commits_sibyl\\"
-							+ RunConfiguration.SELECTED_COMMITS + "\\" + projectName + ".csv")));
+			BufferedReader br;
+//			switch(System.getProperty("os.name")) {
+//			case "Linux":
+			br = new BufferedReader(
+						new FileReader(new File("../../ExtractorUtilities/selected_commits_sibyl/"
+								+ RunConfiguration.SELECTED_COMMITS + "/" + projectName + ".csv")));
 			while (br.ready()) {
 				currentCollection.add(br.readLine().replace("\n", ""));
 			}

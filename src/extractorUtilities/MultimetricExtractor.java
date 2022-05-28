@@ -51,7 +51,6 @@ public class MultimetricExtractor implements ExtractionMethod {
 //		System.out.println(fullProjectPath);
 		
 		String list_of_files_path = DynamicPaths.getPath() + "scripts/list_of_files_for_" + this.target;
-		
 		list_of_files_path = PathVMRectifier.rectify(list_of_files_path);
 //		System.out.println(list_of_files_path);
 		String[] commandArgs = { "find ", fullProjectPath, " > ",  list_of_files_path};
@@ -94,8 +93,8 @@ public class MultimetricExtractor implements ExtractionMethod {
 			BufferedWriter scriptWriter = new BufferedWriter(new FileWriter(multimetricScript)); 
 			scriptWriter.write("#!/bin/bash\n"
 					+ "\n"
-					+ "multimetric `cat /vagrant/ExtractorUtilities/scripts/list_of_files_for_" + this.target + "` > /vagrant/ExtractorUtilities/multimetric/" + RunConfiguration.SELECTED_COMMITS + "/" + this.projectName + "/" + this.target + ".json");
-			String multimetricCommand = "/vagrant/ExtractorUtilities/scripts/run_multimetric_for_" + this.target + ".sh";
+					+ "multimetric `cat " + DynamicPaths.getVagrantPath() + "scripts/list_of_files_for_" + this.target + "` > " + DynamicPaths.getVagrantPath() + "multimetric/" + RunConfiguration.SELECTED_COMMITS + "/" + this.projectName + "/" + this.target + ".json");
+			String multimetricCommand = DynamicPaths.getVagrantPath() + "scripts/run_multimetric_for_" + this.target + ".sh";
 			scriptWriter.close();
 			
 			if (ConsoleFactory.getConsole().run(multimetricCommand, this.target) != 0) {

@@ -16,7 +16,7 @@ public class DynamicPaths{
 	public static String getVagrantPath() {
 		switch (System.getProperty("os.name")) {
 		case "Linux":
-			return "";
+			return "../../ExtractorUtilities/";
 		case "Windows 10":
 			return "/vagrant/ExtractorUtilities/";
 		default:

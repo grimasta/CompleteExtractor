@@ -62,7 +62,7 @@ public class RepoRunner implements Runnable {
 
 	private void delete(String folder) {
 		
-		for (File file : new File(folder + "dbdump\\").listFiles()) {
+		for (File file : new File(folder + "dbdump/").listFiles()) {
 			file.delete();
 		}
 		new File(folder + "dbdump").delete();
@@ -90,10 +90,10 @@ public class RepoRunner implements Runnable {
 			}
 			for (String s : listofDone) {
 				if (!commitSelection.contains(s)) {
-					Path path = Paths.get(alreadydone + "\\" + s + ".json");
+					Path path = Paths.get(alreadydone + "/" + s + ".json");
 					File uselessFileOrFolder = new File(path.toString());
 					if (!Files.exists(path)) {
-						this.delete(alreadydone + "\\stored_" + s + "\\");
+						this.delete(alreadydone + "/stored_" + s + "/");
 					}else
 						uselessFileOrFolder.delete();
 					
