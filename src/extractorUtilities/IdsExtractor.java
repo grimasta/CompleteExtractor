@@ -1,39 +1,13 @@
 package extractorUtilities;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-
-import configurations.RunConfiguration;
-import console.commanders.ConsoleFactory;
-import fileOperationUtilities.PathVMRectifier;
-import paths.DynamicPaths;
-
 public class IdsExtractor implements ExtractionMethod {
 
-	private String target;
-	private String rootPath;
-	@SuppressWarnings("unused")
-	private String projectPath;
-	private String projectName;
-
 	public IdsExtractor(Object object, Object object2, Object object3) {
-		this.target = target;
-		this.rootPath = PathVMRectifier.rectify(rootPath);
-		this.projectPath = projectPath;
-		this.projectName = rootPath.split("/")[rootPath.split("/").length - 1];
+		// TODO Auto-generated constructor stub
 	}
 
 	public IdsExtractor() {
 		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public ExtractionMethod getNewInstance(String target, String rootPath, String projectPath) {
-		return new IdsExtractor(target, rootPath, projectPath);
 	}
 
 	@Override
@@ -43,83 +17,15 @@ public class IdsExtractor implements ExtractionMethod {
 	}
 
 	@Override
+	public ExtractionMethod getNewInstance(String target, String rootPath, String projectPath) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public boolean doExtraction(String language) {
-//		int extractionCount = 0;
-//		System.out.println("target = " + this.target);
-		String fullProjectPath = this.rootPath.split("increments")[0] + "projects_extracted/" + this.projectName + "/";
-
-//		System.out.println(fullProjectPath);
-
-		String list_of_files_path = DynamicPaths.getPath() + "scripts/list_of_files_for_" + this.target;
-
-		list_of_files_path = PathVMRectifier.rectify(list_of_files_path);
-//		System.out.println(list_of_files_path);
-		String[] commandArgs = { "find ", fullProjectPath, " > ", list_of_files_path };
-//		
-//		File targetCommit = new File(this.rootPath + this.target);
-		ConsoleFactory.getConsole().run(commandArgs, null, null, this.target);
-		try {
-//			read the list of file
-			BufferedReader br = new BufferedReader(
-					new FileReader(new File(PathVMRectifier.deRectify(list_of_files_path))));
-
-//			build the list of files to be used as input for the CCCC script
-			String multimetricInput = "";
-//			initialize a counter, testing has showed an abnormal behavior when the number of files to be analyzed exceeds 
-//			certain numbers (around 100) so we keep it to around 50 and will further test to make sure it always works 
-//				int i = 0;
-
-			while (br.ready()) {
-				String line = br.readLine();
-				if (line.endsWith(".c") || line.toLowerCase().endsWith(".cc") || line.toLowerCase().endsWith(".cpp")
-						|| line.toLowerCase().endsWith(".c++") || line.toLowerCase().endsWith(".h")
-						|| line.toLowerCase().endsWith(".hpp") || line.toLowerCase().endsWith(".h++")
-						|| line.toLowerCase().endsWith(".java") || line.toLowerCase().endsWith(".py")
-						|| line.toLowerCase().endsWith(".rb") || line.toLowerCase().endsWith(".js")
-						|| line.toLowerCase().endsWith(".go") || line.toLowerCase().endsWith(".sh")) {
-					if (line.toLowerCase().contains(" "))
-						continue;
-//						line = line.replaceAll("\\s+", "\\ ");
-					// filter out all files that are not c or cpp source or header files as well
-					// java source files
-					multimetricInput += " " + line;
-				}
-			}
-			br.close();
-			BufferedWriter bw = new BufferedWriter(
-					new FileWriter(new File(PathVMRectifier.deRectify(list_of_files_path))));
-			bw.write(multimetricInput);
-			bw.close();
-			new File(DynamicPaths.getPath() + "multimetric/" + RunConfiguration.SELECTED_COMMITS + "/"
-					+ this.projectName + "/").mkdirs();
-//			System.out.println("before multimetric command");
-//			String[] ccccCommand = new String[] { "/bin/bash", "-c", "./run_multimetric.sh" };
-			File multimetricScript = new File(
-					DynamicPaths.getPath() + "scripts/run_multimetric_for_" + this.target + ".sh");
-			BufferedWriter scriptWriter = new BufferedWriter(new FileWriter(multimetricScript));
-			scriptWriter.write(
-					"#!/bin/bash\n" + "\n" + "multimetric `cat /vagrant/ExtractorUtilities/scripts/list_of_files_for_"
-							+ this.target + "` > /vagrant/ExtractorUtilities/multimetric/"
-							+ RunConfiguration.SELECTED_COMMITS + "/" + this.projectName + "/" + this.target + ".json");
-			String multimetricCommand = "/vagrant/ExtractorUtilities/scripts/run_multimetric_for_" + this.target
-					+ ".sh";
-			scriptWriter.close();
-
-			if (ConsoleFactory.getConsole().run(multimetricCommand, this.target) != 0) {
-				System.out.println(this.projectName + " experienced an error at " + this.target + " running command : "
-						+ multimetricCommand);
-				return false;
-			}
-			multimetricScript.delete();
-			new File(PathVMRectifier.deRectify(list_of_files_path)).delete();
-//			System.out.println("after multimetric command");
-
-		} catch (IOException ioe) {
-			System.out.println("Error while opening the list of files in multimetricExtractor: \nError Message \n"
-					+ ioe.getLocalizedMessage());
-			return false;
-		}
-		return true;
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override

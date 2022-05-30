@@ -1,18 +1,25 @@
 package repo.runner;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.eclipse.jgit.diff.DiffEntry;
 
 import ca.uwo.git.utilities.CommitSelection;
 import ca.uwo.git.utilities.GitRepo;
 import configurations.RunConfiguration;
 import extractorUtilities.ExtractionMethod;
+import extractorUtilities.ExtractorType;
 import facades.ProxyFacade;
 import fileOperationUtilities.MoveFilesAndFolders;
 import fileOperationUtilities.PathVMRectifier;
@@ -61,22 +68,25 @@ public class RepoRunner implements Runnable {
 	}
 
 	private void delete(String folder) {
-		
+
 		for (File file : new File(folder + "dbdump/").listFiles()) {
 			file.delete();
 		}
 		new File(folder + "dbdump").delete();
 		new File(folder).delete();
 	}
-	
-	
+
 //	TODO differentiate commands to the commit id level so that they can be run in parallel
 	@Override
 	public void run() {
+		Map<String, String> repo_file_ids = new HashMap<String, String>();
+		Map<String, String> deleted_files = new HashMap<>();
+
 		if (threads == 0) {
 			gitRepo.initializeGitRepo();
 			List<String> selectedFromYear;
-			File alreadydone = new File(DynamicPaths.getPath() + RunConfiguration.EXTRACTOR_TYPES.get(0).label + "/" + RunConfiguration.SELECTED_COMMITS + "/" + gitRepo.getProjectName());
+			File alreadydone = new File(DynamicPaths.getPath() + RunConfiguration.EXTRACTOR_TYPES.get(0).label + "/"
+					+ RunConfiguration.SELECTED_COMMITS + "/" + gitRepo.getProjectName());
 			if (!alreadydone.exists())
 				alreadydone.mkdirs();
 			List<String> listofDone = new ArrayList<>();
@@ -94,62 +104,115 @@ public class RepoRunner implements Runnable {
 					File uselessFileOrFolder = new File(path.toString());
 					if (!Files.exists(path)) {
 						this.delete(alreadydone + "/stored_" + s + "/");
-					}else
+					} else
 						uselessFileOrFolder.delete();
-					
+
 				}
 			}
 			System.out.println(gitRepo.getProjectName() + " has a total of " + gitRepo.getAllCommitNames().size());
 			String language = this.checkLanguage();
 			if (language == "none")
 				return;
-			
-			
-			
-			while (gitRepo.hasNext() && !ProxyFacade.stop.get("stop")) {
 
-				// checkout the next commit in the repo
-				gitRepo.moveToNextCommit();
-				if (!commitSelection.contains(gitRepo.getCurrentCommitName())) {
-					continue;
-				}
-				if (listofDone.contains(gitRepo.getCurrentCommitName())) {
-					continue;
-				}
-//				System.out.println(gitRepo.getCurrentCommitName());
-				if (gitRepo.checkoutNextCommit()) {
+			try {
+				BufferedWriter id_bw = new BufferedWriter(
+						new FileWriter(new File(gitRepo.getProjectName().replace("/", "") + "_ids.txt")));
+				while (gitRepo.hasNext() && !ProxyFacade.stop.get("stop")) {
 
-					for (MoveFilesAndFolders mfaf : this.moverUtilities) {
-						MoveFilesAndFolders moveFilesAndFoldersOfCommit = mfaf.getNewInstance(gitRepo.getProjectPath(),
-								gitRepo.getRootPath().replace("/projects_extracted", "") + "increments/"
-										+ RunConfiguration.SELECTED_COMMITS + "/" + gitRepo.getProjectName()
-										+ gitRepo.getCurrentCommitName() + "/",
-								gitRepo.getChangedFiles());
-						// using the initialized mover move all files from their old location to a new
-						// temporary location to run the extractor on
-						moveFilesAndFoldersOfCommit.moveAllFromMap();
+					// checkout the next commit in the repo
+					gitRepo.moveToNextCommit();
+					if (!commitSelection.contains(gitRepo.getCurrentCommitName())) {
+						continue;
 					}
-					// initialize an extractor for this commit
-					for (ExtractionMethod em : this.extractionMethods) {
-						if (em.getNewInstance(gitRepo.getCurrentCommitName(),
-								gitRepo.getRootPath().replace("/projects_extracted", "") + "increments/"
-										+ RunConfiguration.SELECTED_COMMITS + "/"
-										+ gitRepo.getProjectName().replace("/", ""),
-								gitRepo.getCurrentCommitName()).doExtraction(language)) {
-						} else {
-							break;
+					if (listofDone.contains(gitRepo.getCurrentCommitName())) {
+						if (gitRepo.checkoutNextCommit()) {
+							if (RunConfiguration.EXTRACTOR_TYPES.contains(ExtractorType.IDS)) {
+								for (DiffEntry de : gitRepo.getChangedFilesId()) {
+									if (de.getOldPath().contains("null")) {
+										repo_file_ids.put(de.getNewPath(), de.getNewId().name());
+										id_bw.write(gitRepo.getCurrentCommitName() + ", " + de.getNewPath() + ", "
+												+ de.getNewId().name() + ", +" + "\n");
+									} else {
+										if (repo_file_ids.containsKey(de.getOldPath())) {
+											if (de.getNewPath().contains("null")) {
+												id_bw.write(gitRepo.getCurrentCommitName() + ", " + de.getOldPath()
+														+ ", " + de.getOldId().name() + ", -" + "\n");
+												deleted_files.put(de.getOldPath(), de.getOldId().name());
+											} else {
+												id_bw.write(gitRepo.getCurrentCommitName() + ", " + de.getNewPath()
+														+ ", " + repo_file_ids.get(de.getOldPath()) + ", ^" + "\n");
+												repo_file_ids.put(de.getNewPath(), repo_file_ids.get(de.getOldPath()));
+
+											}
+										}
+									}
+
+								}
+							}
 						}
+						continue;
 					}
-				} else {
-					break;
-				}
-				if (ProxyFacade.stop.get("stop")) {
-					break;
-				}
+//				System.out.println(gitRepo.getCurrentCommitName());
+					if (gitRepo.checkoutNextCommit()) {
 
+						for (MoveFilesAndFolders mfaf : this.moverUtilities) {
+							MoveFilesAndFolders moveFilesAndFoldersOfCommit = mfaf.getNewInstance(
+									gitRepo.getProjectPath(),
+									gitRepo.getRootPath().replace("/projects_extracted", "") + "increments/"
+											+ RunConfiguration.SELECTED_COMMITS + "/" + gitRepo.getProjectName()
+											+ gitRepo.getCurrentCommitName() + "/",
+									gitRepo.getChangedFiles());
+							// using the initialized mover move all files from their old location to a new
+							// temporary location to run the extractor on
+							moveFilesAndFoldersOfCommit.moveAllFromMap();
+						}
+						// initialize an extractor for this commit
+						for (ExtractionMethod em : this.extractionMethods) {
+							if (em.getNewInstance(gitRepo.getCurrentCommitName(),
+									gitRepo.getRootPath().replace("/projects_extracted", "") + "increments/"
+											+ RunConfiguration.SELECTED_COMMITS + "/"
+											+ gitRepo.getProjectName().replace("/", ""),
+									gitRepo.getCurrentCommitName()).doExtraction(language)) {
+							} else {
+								break;
+							}
+						}
+						if (RunConfiguration.EXTRACTOR_TYPES.contains(ExtractorType.IDS)) {
+							for (DiffEntry de : gitRepo.getChangedFilesId()) {
+								if (de.getOldPath().contains("null")) {
+									repo_file_ids.put(de.getNewPath(), de.getNewId().name());
+									id_bw.write(gitRepo.getCurrentCommitName() + ", " + de.getNewPath() + ", "
+											+ de.getNewId().name() + ", +" + "\n");
+								} else {
+									if (repo_file_ids.containsKey(de.getOldPath())) {
+										if (de.getNewPath().contains("null")) {
+											id_bw.write(gitRepo.getCurrentCommitName() + ", " + de.getOldPath() + ", "
+													+ de.getOldId().name() + ", -" + "\n");
+											deleted_files.put(de.getOldPath(), de.getOldId().name());
+										} else {
+											id_bw.write(gitRepo.getCurrentCommitName() + ", " + de.getNewPath() + ", "
+													+ repo_file_ids.get(de.getOldPath()) + ", ^" + "\n");
+											repo_file_ids.put(de.getNewPath(), repo_file_ids.get(de.getOldPath()));
+
+										}
+									}
+								}
+
+							}
+						}
+					} else {
+						break;
+					}
+					if (ProxyFacade.stop.get("stop")) {
+						break;
+					}
+
+				}
+				System.out.println("finished_extraction for " + this.gitRepo.getProjectName());
+				gitRepo.resetToHead();
+			} catch (IOException ioe) {
+				System.out.println(ioe.getMessage() + " @ RepoRunner");
 			}
-			System.out.println("finished_extraction for " + this.gitRepo.getProjectName());
-			gitRepo.resetToHead();
 		} else {
 			System.out.println("oops");
 		}
