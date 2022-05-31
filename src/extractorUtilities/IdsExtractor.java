@@ -18,8 +18,7 @@ public class IdsExtractor implements ExtractionMethod {
 
 	@Override
 	public ExtractionMethod getNewInstance(String target, String rootPath, String projectPath) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IdsExtractor(target, rootPath, projectPath);
 	}
 
 	@Override

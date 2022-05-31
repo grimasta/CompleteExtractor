@@ -43,6 +43,8 @@ public class CommitSelection {
 
 	public Boolean contains(String commitId) {
 		boolean contains;
+		if (currentCollection.size() == 0 && yearBasedSelection.size() == 0)
+			return true;
 		contains = currentCollection.contains(commitId) || yearBasedSelection.contains(commitId);
 		return contains;
 	}

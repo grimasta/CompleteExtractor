@@ -17,9 +17,9 @@ public class RunConfiguration {
 //			ExtractorType.EOD,
 //			ExtractorType.FETCH,
 //			ExtractorType.FINALISATION,
-			ExtractorType.IDS,
-			ExtractorType.MULTIMETRIC,
-//			ExtractorType.SNAVIGATOR,
+//			ExtractorType.IDS,
+//			ExtractorType.MULTIMETRIC,
+			ExtractorType.SNAVIGATOR,
 //			ExtractorType.JASOME,
 //			ExtractorType.SRCML,
 //			ExtractorType.FINALISATION

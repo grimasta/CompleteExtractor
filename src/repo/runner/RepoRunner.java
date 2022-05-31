@@ -98,15 +98,17 @@ public class RepoRunner implements Runnable {
 				selectedFromYear = gitRepo.getAllCommitNamesForYear(RunConfiguration.SELECTED_YEARS);
 				commitSelection.setYearlySelectedCommits(selectedFromYear);
 			}
-			for (String s : listofDone) {
-				if (!commitSelection.contains(s)) {
-					Path path = Paths.get(alreadydone + "/" + s + ".json");
-					File uselessFileOrFolder = new File(path.toString());
-					if (!Files.exists(path)) {
-						this.delete(alreadydone + "/stored_" + s + "/");
-					} else
-						uselessFileOrFolder.delete();
+			if (RunConfiguration.EXTRACTOR_TYPES.contains(ExtractorType.SNAVIGATOR)) {
+				for (String s : listofDone) {
+					if (!commitSelection.contains(s)) {
+						Path path = Paths.get(alreadydone + "/" + s + ".json");
+						File uselessFileOrFolder = new File(path.toString());
+						if (!Files.exists(path)) {
+							this.delete(alreadydone + "/stored_" + s + "/");
+						} else
+							uselessFileOrFolder.delete();
 
+					}
 				}
 			}
 			System.out.println(gitRepo.getProjectName() + " has a total of " + gitRepo.getAllCommitNames().size());
@@ -115,8 +117,8 @@ public class RepoRunner implements Runnable {
 				return;
 
 			try {
-				BufferedWriter id_bw = new BufferedWriter(
-						new FileWriter(new File(gitRepo.getProjectName().replace("/", "") + "_ids.txt")));
+				BufferedWriter id_bw = new BufferedWriter(new FileWriter(new File(alreadydone.getCanonicalPath() + "/"
+						+ gitRepo.getProjectName().replace("/", "") + "_ids.txt")));
 				while (gitRepo.hasNext() && !ProxyFacade.stop.get("stop")) {
 
 					// checkout the next commit in the repo
@@ -208,6 +210,7 @@ public class RepoRunner implements Runnable {
 					}
 
 				}
+				id_bw.close();
 				System.out.println("finished_extraction for " + this.gitRepo.getProjectName());
 				gitRepo.resetToHead();
 			} catch (IOException ioe) {
