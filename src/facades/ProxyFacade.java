@@ -46,7 +46,8 @@ public class ProxyFacade extends ExtractionFacade {
 			for (ExtractorType extractorType : RunConfiguration.EXTRACTOR_TYPES)
 				rr.addExtractor(ExtractorFactory.create(extractorType));
 			if (RunConfiguration.EXTRACTOR_TYPES.contains(ExtractorType.FETCH) || 
-					RunConfiguration.EXTRACTOR_TYPES.contains(ExtractorType.SNAVIGATOR))
+					RunConfiguration.EXTRACTOR_TYPES.contains(ExtractorType.SNAVIGATOR) ||
+					RunConfiguration.EXTRACTOR_TYPES.contains(ExtractorType.SUPPLEMENTAL))
 				rr.addMover(new MoveFilesAndFolders());
 			repoRunners.add(rr);
 			es.execute(rr);

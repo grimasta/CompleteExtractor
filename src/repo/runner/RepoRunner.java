@@ -115,10 +115,13 @@ public class RepoRunner implements Runnable {
 			String language = this.checkLanguage();
 			if (language == "none")
 				return;
-
 			try {
-				BufferedWriter id_bw = new BufferedWriter(new FileWriter(new File(alreadydone.getCanonicalPath() + "/"
+				BufferedWriter id_bw = null;
+//				if (RunConfiguration.EXTRACTOR_TYPES.contains(ExtractorType.IDS)) {
+				new File(alreadydone.getCanonicalPath().replace(RunConfiguration.EXTRACTOR_TYPES.get(0).label, "ids") + "/").mkdirs();
+				id_bw = new BufferedWriter(new FileWriter(new File(alreadydone.getCanonicalPath().replace(RunConfiguration.EXTRACTOR_TYPES.get(0).label, "ids") + "/"
 						+ gitRepo.getProjectName().replace("/", "") + "_ids.txt")));
+//				}
 				while (gitRepo.hasNext() && !ProxyFacade.stop.get("stop")) {
 
 					// checkout the next commit in the repo
@@ -126,34 +129,34 @@ public class RepoRunner implements Runnable {
 					if (!commitSelection.contains(gitRepo.getCurrentCommitName())) {
 						continue;
 					}
-					if (listofDone.contains(gitRepo.getCurrentCommitName())) {
-						if (gitRepo.checkoutNextCommit()) {
-							if (RunConfiguration.EXTRACTOR_TYPES.contains(ExtractorType.IDS)) {
-								for (DiffEntry de : gitRepo.getChangedFilesId()) {
-									if (de.getOldPath().contains("null")) {
-										repo_file_ids.put(de.getNewPath(), de.getNewId().name());
-										id_bw.write(gitRepo.getCurrentCommitName() + ", " + de.getNewPath() + ", "
-												+ de.getNewId().name() + ", +" + "\n");
-									} else {
-										if (repo_file_ids.containsKey(de.getOldPath())) {
-											if (de.getNewPath().contains("null")) {
-												id_bw.write(gitRepo.getCurrentCommitName() + ", " + de.getOldPath()
-														+ ", " + de.getOldId().name() + ", -" + "\n");
-												deleted_files.put(de.getOldPath(), de.getOldId().name());
-											} else {
-												id_bw.write(gitRepo.getCurrentCommitName() + ", " + de.getNewPath()
-														+ ", " + repo_file_ids.get(de.getOldPath()) + ", ^" + "\n");
-												repo_file_ids.put(de.getNewPath(), repo_file_ids.get(de.getOldPath()));
-
-											}
-										}
-									}
-
-								}
-							}
-						}
-						continue;
-					}
+//					if (listofDone.contains(gitRepo.getCurrentCommitName())) {
+//						if (gitRepo.checkoutNextCommit()) {
+//							if (RunConfiguration.EXTRACTOR_TYPES.contains(ExtractorType.IDS)) {
+//								for (DiffEntry de : gitRepo.getChangedFilesId()) {
+//									if (de.getOldPath().contains("null")) {
+//										repo_file_ids.put(de.getNewPath(), de.getNewId().name());
+//										id_bw.write(gitRepo.getCurrentCommitName() + ", " + de.getNewPath() + ", "
+//												+ de.getNewId().name() + ", +" + "\n");
+//									} else {
+//										if (repo_file_ids.containsKey(de.getOldPath())) {
+//											if (de.getNewPath().contains("null")) {
+//												id_bw.write(gitRepo.getCurrentCommitName() + ", " + de.getOldPath()
+//														+ ", " + de.getOldId().name() + ", -" + "\n");
+//												deleted_files.put(de.getOldPath(), de.getOldId().name());
+//											} else {
+//												id_bw.write(gitRepo.getCurrentCommitName() + ", " + de.getNewPath()
+//														+ ", " + repo_file_ids.get(de.getOldPath()) + ", ^" + "\n");
+//												repo_file_ids.put(de.getNewPath(), repo_file_ids.get(de.getOldPath()));
+//
+//											}
+//										}
+//									}
+//
+//								}
+//							}
+//						}
+//						continue;
+//					}
 //				System.out.println(gitRepo.getCurrentCommitName());
 					if (gitRepo.checkoutNextCommit()) {
 
@@ -179,29 +182,29 @@ public class RepoRunner implements Runnable {
 								break;
 							}
 						}
-						if (RunConfiguration.EXTRACTOR_TYPES.contains(ExtractorType.IDS)) {
-							for (DiffEntry de : gitRepo.getChangedFilesId()) {
-								if (de.getOldPath().contains("null")) {
-									repo_file_ids.put(de.getNewPath(), de.getNewId().name());
-									id_bw.write(gitRepo.getCurrentCommitName() + ", " + de.getNewPath() + ", "
-											+ de.getNewId().name() + ", +" + "\n");
-								} else {
-									if (repo_file_ids.containsKey(de.getOldPath())) {
-										if (de.getNewPath().contains("null")) {
-											id_bw.write(gitRepo.getCurrentCommitName() + ", " + de.getOldPath() + ", "
-													+ de.getOldId().name() + ", -" + "\n");
-											deleted_files.put(de.getOldPath(), de.getOldId().name());
-										} else {
-											id_bw.write(gitRepo.getCurrentCommitName() + ", " + de.getNewPath() + ", "
-													+ repo_file_ids.get(de.getOldPath()) + ", ^" + "\n");
-											repo_file_ids.put(de.getNewPath(), repo_file_ids.get(de.getOldPath()));
+						 
+						for (DiffEntry de : gitRepo.getChangedFilesId()) {
+							if (de.getOldPath().contains("null")) {
+								repo_file_ids.put(de.getNewPath(), de.getNewId().name());
+								id_bw.write(gitRepo.getCurrentCommitName() + ", " + de.getNewPath() + ", "
+										+ de.getNewId().name() + ", +" + "\n");
+							} else {
+								if (repo_file_ids.containsKey(de.getOldPath())) {
+									if (de.getNewPath().contains("null")) {
+										id_bw.write(gitRepo.getCurrentCommitName() + ", " + de.getOldPath() + ", "
+												+ de.getOldId().name() + ", -" + "\n");
+										deleted_files.put(de.getOldPath(), de.getOldId().name());
+									} else {
+										id_bw.write(gitRepo.getCurrentCommitName() + ", " + de.getNewPath() + ", "
+												+ repo_file_ids.get(de.getOldPath()) + ", ^" + "\n");
+										repo_file_ids.put(de.getNewPath(), repo_file_ids.get(de.getOldPath()));
 
-										}
 									}
 								}
-
 							}
+
 						}
+						
 					} else {
 						break;
 					}
@@ -210,7 +213,8 @@ public class RepoRunner implements Runnable {
 					}
 
 				}
-				id_bw.close();
+				if (id_bw != null)
+					id_bw.close();
 				System.out.println("finished_extraction for " + this.gitRepo.getProjectName());
 				gitRepo.resetToHead();
 			} catch (IOException ioe) {

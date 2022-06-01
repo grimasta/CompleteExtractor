@@ -19,7 +19,8 @@ public class RunConfiguration {
 //			ExtractorType.FINALISATION,
 //			ExtractorType.IDS,
 //			ExtractorType.MULTIMETRIC,
-			ExtractorType.SNAVIGATOR,
+//			ExtractorType.SNAVIGATOR,
+			ExtractorType.SUPPLEMENTAL,
 //			ExtractorType.JASOME,
 //			ExtractorType.SRCML,
 //			ExtractorType.FINALISATION

@@ -11,6 +11,7 @@ public class ExtractorFactory {
 		case FINALISATION: return new FinalisationExtraction();
 		case MULTIMETRIC: return new MultimetricExtractor();
 		case SNAVIGATOR: return new SourceNavigatorExtractor();
+		case SUPPLEMENTAL: return new SupplementalExtractor();
 		case SRCML: return new SrcMLExtractor();
 		case JASOME: return new JasomeExtractor();
 		default:

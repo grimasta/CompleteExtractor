@@ -74,16 +74,16 @@ public class SshConsole implements Console {
 		Runtime thisRuntime = Runtime.getRuntime();
 		try {
 			String scriptWindowsFilePath = "../../ExtractorUtilities/scripts/run_script_" + target + ".sh";
-			File scriptFileDescriptor = new File("../../ExtractorUtilities/scripts/run_script_" + target + ".sh");
+			File scriptFileDescriptor = new File(scriptWindowsFilePath);
 			BufferedWriter bw = new BufferedWriter(new FileWriter(scriptFileDescriptor));
-			System.out.println(dir.getAbsolutePath());
+//			System.out.println(dir.getAbsolutePath());
 			String[] Parts = dir.getAbsolutePath().split("\\\\");
 			String pwd = "";
 			for (int i = 1; i < Parts.length; i++)
 				pwd += "/" + Parts[i];
+			bw.write("#!/bin/bash\n");
 			bw.write("cd " + pwd + "\n");
 			bw.write(command+"\n");
-			bw.write("vagrant\n");
 			bw.close();
 			String bashScriptPath = "../../bash_script" + target + ".bat"; 
 			File bashScript = new File(bashScriptPath);
@@ -103,6 +103,7 @@ public class SshConsole implements Console {
 						System.out.println(ie.getMessage());
 					}
 					currentTry ++;
+					System.out.println("retry number : " + currentTry);
 					executionProcess = thisRuntime.
 							exec("cmd /c " + "..\\\\..\\\\bash_script" + target + ".bat");
 					executionProcess.waitFor();
