@@ -174,6 +174,10 @@ public class RepoRunner implements Runnable {
 							this.clearSupplemental();
 							found = true;
 							System.out.println("found it");
+							System.out.println("Last commit supplementally Extracted was " + gitRepo.getCurrentCommitName());
+						} else {
+							if (!found)
+								continue;
 						}
 					}
 //					if (listofDone.contains(gitRepo.getCurrentCommitName())) {
