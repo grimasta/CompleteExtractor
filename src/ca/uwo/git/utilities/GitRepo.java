@@ -351,6 +351,10 @@ public class GitRepo {
 		this.currentCommit = this.iteratorOfCommits.next();
 	}
 
+	public void moveToPreviousCommit() {
+		this.currentCommit = this.iteratorOfCommits.previous();
+	}
+	
 	public List<String> getOnlyCommitNames() {
 		List<String> allCommitNames = new ArrayList<>();
 		for (RevCommit rc : this.listOfCommits) {
