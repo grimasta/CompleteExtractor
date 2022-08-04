@@ -62,7 +62,7 @@ public class DynamicCommands {
 		case "Linux":
 			return "python /home/or10n/extractor/fetch-Java/scripts/createRSFwithNames.py";
 		case "Windows 10":
-			return "python /home/vagrant/extractor/fetch-Java/scripts/createRSFwithNames.py";
+			return "python2.7 /home/vagrant/extractor/fetch-Java/scripts/createRSFwithNames.py";
 		default:
 			return "python /home/or10n/extractor/fetch-Java/scripts/createRSFwithNames.py"; 
 		}

@@ -1,22 +1,23 @@
-## https://github.com/KDE/elisa
-## https://github.com/apache/forrest
-## https://github.com/KDE/konsole
-## https://github.com/KDE/dolphin
-## https://github.com/KDE/kget
-## https://github.com/KDE/kolourpaint
-## https://github.com/KDE/ruqola
-## https://github.com/KDE/ktorrent
-## https://github.com/KDE/konversation
-## https://github.com/KDE/plasma-framework
-https://github.com/KDE/kate
-https://github.com/apache/log4j
-https://github.com/KDE/konqueror
 https://github.com/apache/ant-ivy
-## https://github.com/KDE/kexi
-## https://github.com/KDE/kcontacts
-## https://github.com/KDE/kdepim-addons
-## https://github.com/KDE/gwenview
-## https://github.com/GNOME/epiphany
+https://github.com/KDE/dolphin
+https://github.com/KDE/elisa
+https://github.com/GNOME/epiphany
+https://github.com/apache/forrest
+https://github.com/KDE/gwenview
+https://github.com/KDE/kate
+https://github.com/KDE/kcontacts
+https://github.com/KDE/kdepim-addons
+https://github.com/KDE/kexi
+https://github.com/KDE/kget
+https://github.com/KDE/kolourpaint
+https://github.com/KDE/konqueror
+https://github.com/KDE/konsole
+https://github.com/KDE/konversation
+https://github.com/KDE/ktorrent
+https://github.com/apache/log4j
+https://github.com/KDE/plasma-framework
+https://github.com/KDE/ruqola
+## 
 ## https://github.com/django/django
 ## https://github.com/microsoft/vscode
 ## https://github.com/apache/yetus

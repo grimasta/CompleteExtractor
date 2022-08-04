@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import configurations.RunConfiguration;
 import console.commanders.ConsoleFactory;
 import console.commanders.DynamicCommands;
 import fileOperationUtilities.MoveFilesAndFolders;
@@ -20,15 +21,22 @@ public class Extractor implements ExtractionMethod {
 	private String target;
 	private String rootPath;
 	private String projectPath;
-
-	public Extractor(String target, String rootPath, String projectPath) {
-		this.target = target;
-		this.rootPath = PathVMRectifier.rectify(rootPath);
-		this.projectPath = projectPath;
-	}
+	private String projectName;
 
 	public Extractor() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	public Extractor(String target, String rootPath, String projectPath) {
+		this.target = target;  // commit name
+		this.projectName = rootPath.split(RunConfiguration.SELECTED_COMMITS)[1].replace("/", "");
+		rootPath = rootPath.split("increments")[0] + "projects_extracted/";
+//		rootPath += "projects_extracted/" + 
+//		System.out.println(rootPath);
+//		System.out.println(projectPath);
+		this.rootPath = PathVMRectifier.rectify(rootPath);
+		this.projectPath = projectPath;
+//		this.projectName = rootPath.split("/")[rootPath.split("/").length - 1];
 	}
 
 	@Override
@@ -94,18 +102,22 @@ public class Extractor implements ExtractionMethod {
 	public boolean doExtraction(String language) {
 		File targetProject = null;
 		boolean done = false;
-		System.out.println("target = " + this.target);
+//		System.out.println("target = " + this.target);
 		String fetchScript = DynamicCommands.getDynamicFetch() + language + "2rsf.sh";
 		String rsfWithNamesScript = DynamicCommands.getDynamicRsfWithNames();
-		targetProject = new File(PathVMRectifier.deRectify(this.rootPath) + this.target);
+		targetProject = new File(PathVMRectifier.deRectify(this.rootPath));
 		System.out.println(targetProject);
 		if (targetProject.exists() && targetProject.isDirectory()) {
 			String pwd = this.rootPath;
 			System.out.println("started_extraction");
-			done = (ConsoleFactory.getConsole().run(fetchScript + " " + this.target, null, new File(pwd)) == 0);
+			done = (ConsoleFactory.getConsole().run(new String[] {fetchScript, this.projectName}, null, new File(pwd), target) == 0);
+//			done = (ConsoleFactory.getConsole().run(fetchScript + " " + this.projectName, null, new File(pwd)) == 0);
 			System.out.println("finished_extraction");
-			done = done && (ConsoleFactory.getConsole().run(rsfWithNamesScript + " " + this.target + ".rsf", null,
-					new File(pwd)) == 0);
+
+			done = done && (ConsoleFactory.getConsole().run(new String[] {rsfWithNamesScript, this.projectName + ".rsf"}, null,
+					new File(pwd), target) == 0);
+			storeExtraction();
+			clearExtractionLocation();
 			return done;
 		}
 		return done;
@@ -132,14 +144,14 @@ public class Extractor implements ExtractionMethod {
 
 	public void storeExtraction() {
 		// this.rootPath;
-		System.out.println(this.rootPath + " ||||| " + this.rootPath + "stored_" + this.target + "/");
 		MoveFilesAndFolders moveFilesAndFoldersResultsOfExtraction = new MoveFilesAndFolders(this.rootPath,
-				this.rootPath + "stored_" + this.target + "/");
-		moveFilesAndFoldersResultsOfExtraction.move(this.target + ".rsf");
-		moveFilesAndFoldersResultsOfExtraction.move(this.target + "_final.rsf");
-		moveFilesAndFoldersResultsOfExtraction.move(this.target + "_names.rsf");
-		moveFilesAndFoldersResultsOfExtraction.move(this.target + ".cdif");
-		moveFilesAndFoldersResultsOfExtraction.moveFolder(this.target + "/", "dbdump");
+				this.rootPath.split("projects_extracted")[0] + "increments/" + RunConfiguration.SELECTED_COMMITS + "/" + this.projectName + "/stored_" + this.target + "/");
+		System.out.println(this.rootPath + " ||||| " + this.rootPath.split("projects_extracted")[0] + "increments/" + RunConfiguration.SELECTED_COMMITS + "/" + this.projectName + "/stored_" + this.target + "/");
+		moveFilesAndFoldersResultsOfExtraction.move(this.projectName + ".rsf");
+		moveFilesAndFoldersResultsOfExtraction.move(this.projectName + "_final.rsf");
+		moveFilesAndFoldersResultsOfExtraction.move(this.projectName + "_names.rsf");
+		moveFilesAndFoldersResultsOfExtraction.move(this.projectName + ".cdif");
+		moveFilesAndFoldersResultsOfExtraction.moveFolder(this.projectName + "/", "dbdump");
 	}
 
 	public void clearExtractionLocation() {
@@ -148,7 +160,7 @@ public class Extractor implements ExtractionMethod {
 		for (File f : extractionLocation.listFiles())
 			if (f.getName().contains(".rsf") || f.getName().contains(".log") || f.getName().contains(".cdif"))
 				f.delete();
-		String folderTreeForDeletion = this.rootPath + this.target;
+		String folderTreeForDeletion = this.rootPath + this.projectName + "/dbdump";
 		ConsoleFactory.getConsole().run(deleteCommand + folderTreeForDeletion, target);
 	}
 

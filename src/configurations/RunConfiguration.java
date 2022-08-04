@@ -11,16 +11,17 @@ public class RunConfiguration {
 	
 //	public static final String SELECTED_COMMITS = "3years/";
 	public static final String SELECTED_COMMITS = "3000commits";
+//	public static final String SELECTED_COMMITS = "allCommits";
 	public static final List<ExtractorType> EXTRACTOR_TYPES = new ArrayList<>();
 	private static ExtractorType[] a = new ExtractorType[] {
 //			ExtractorType.CCCC,
 //			ExtractorType.EOD,
-//			ExtractorType.FETCH,
+			ExtractorType.FETCH,
 //			ExtractorType.FINALISATION,
 //			ExtractorType.IDS,
 //			ExtractorType.MULTIMETRIC,
 //			ExtractorType.SNAVIGATOR,
-			ExtractorType.SUPPLEMENTAL,
+//			ExtractorType.SUPPLEMENTAL,
 //			ExtractorType.JASOME,
 //			ExtractorType.SRCML,
 //			ExtractorType.FINALISATION

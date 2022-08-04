@@ -54,6 +54,14 @@ public class SupplementalExtractor implements ExtractionMethod {
 //		language = checkLanguage();
 		if (language != "none") {
 			if (language.equals("java")) {
+				try {
+				new File(PathVMRectifier.deRectify(this.rootPath) + "/stored_" + this.target + "/dbdump/" + this.target + ".condcomp").createNewFile();
+				new File(PathVMRectifier.deRectify(this.rootPath) + "/stored_" + this.target + "/dbdump/" + this.target + ".includes2").createNewFile();
+				new File(PathVMRectifier.deRectify(this.rootPath) + "/stored_" + this.target + "/dbdump/" + this.target + ".namespaces").createNewFile();
+				}catch(IOException ioe) {
+					System.out.println(ioe.getMessage() + " when trying to create empty files for Supplemental extractor for Java project");
+				}
+//				clearExtractionLocation();
 				return false;
 			}
 			
@@ -103,6 +111,7 @@ public class SupplementalExtractor implements ExtractionMethod {
 //			certain numbers (around 100) so we keep it to around 50 and will further test to make sure it always works 
 //				int i = 0;
 			
+			
 			String long_command = "allFiles=`find . \\( -name \"*.cpp\" -o -name \"*.c\" -o -name \"*.cc\" -o -name \"*.cxx\" -o -name \"*.hpp\" -o -name \"*.h\" -o -name \"*.hh\" -o -name \"*.hxx\" \\)`\n"
 					+ "for file in $allFiles; do\n"
 					+ "        perl /home/vagrant/extractor/fetch-Cpp/scripts/parserExt/preprocDirectives.pl \"$file\" | sed \"s/\\.\\///g\" >> " + this.rootPath + "/stored_" + this.target + "/dbdump/" + this.target + ".condcomp\n"
@@ -135,6 +144,7 @@ public class SupplementalExtractor implements ExtractionMethod {
 			if (f.getName().contains(".rsf") || f.getName().contains(".log") || f.getName().contains(".cdif"))
 				f.delete();
 		String folderTreeForDeletion = this.rootPath + "/" + this.target;
+//		System.out.println(folderTreeForDeletion);
 		ConsoleFactory.getConsole().run(deleteCommand + folderTreeForDeletion, target);
 		
 //		File extractionLocation = new File(PathVMRectifier.deRectify(this.rootPath));

@@ -105,6 +105,8 @@ public class MoveFilesAndFolders {
 				mkdir(sourcePathIncremental);
 			}
 		}
+		if (source.contains(" "))
+			return;
 		source = source.replaceAll(" ", "\\ ");
 		target = target.replaceAll(" ", "\\ ");
 		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicCopy() + source + " " + target, currentCommitID);

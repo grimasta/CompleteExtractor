@@ -82,10 +82,11 @@ public class RepoRunner implements Runnable {
 				+ RunConfiguration.SELECTED_COMMITS + "/" + gitRepo.getProjectName());
 		for (File f : outputFolder.listFiles()) {
 			for (File dbdumpFolder : f.listFiles()) {
-				for (String outputDataFile : dbdumpFolder.list()) {
-					if (outputDataFile.contains("includes2"))
-						doneList.add(f.getName().replace("stored_", ""));
-				}
+				if (outputFolder.exists())
+					for (String outputDataFile : dbdumpFolder.list()) {
+						if (outputDataFile.contains("includes2"))
+							doneList.add(f.getName().replace("stored_", ""));
+					}
 			}
 		}
 		return doneList;
@@ -95,7 +96,7 @@ public class RepoRunner implements Runnable {
 		File outputFolder = new File(DynamicPaths.getPath() + RunConfiguration.EXTRACTOR_TYPES.get(0).label + "/"
 				+ RunConfiguration.SELECTED_COMMITS + "/" + gitRepo.getProjectName() + "/stored_"
 				+ gitRepo.getCurrentCommitName());
-		System.out.println(outputFolder);
+//		System.out.println(outputFolder);
 		if (outputFolder.exists())
 			for (File dbdumpFolder : outputFolder.listFiles()) {
 				for (File outputDataFile : dbdumpFolder.listFiles()) {
@@ -117,6 +118,10 @@ public class RepoRunner implements Runnable {
 		if (threads == 0) {
 			gitRepo.initializeGitRepo();
 			List<String> selectedFromYear;
+			File resultStorage = new File(DynamicPaths.getPath() + "increments/" + RunConfiguration.SELECTED_COMMITS + "/" + gitRepo.getProjectName());
+			if (!resultStorage.exists()){
+				resultStorage.mkdirs();
+			}
 			File alreadydone = new File(DynamicPaths.getPath() + RunConfiguration.EXTRACTOR_TYPES.get(0).label + "/"
 					+ RunConfiguration.SELECTED_COMMITS + "/" + gitRepo.getProjectName());
 			if (!alreadydone.exists())
@@ -156,7 +161,7 @@ public class RepoRunner implements Runnable {
 						alreadydone.getCanonicalPath().replace(RunConfiguration.EXTRACTOR_TYPES.get(0).label, "ids")
 								+ "/" + gitRepo.getProjectName().replace("/", "") + "_ids.txt")));
 //				}
-				List<String> supplementallyDone = this.done();
+//				List<String> supplementallyDone = this.done();
 				boolean found = false;
 				while (gitRepo.hasNext() && !ProxyFacade.stop.get("stop")) {
 
@@ -165,21 +170,21 @@ public class RepoRunner implements Runnable {
 					if (!commitSelection.contains(gitRepo.getCurrentCommitName())) {
 						continue;
 					}
-//					if (!listofDone.contains(gitRepo.getCurrentCommitName())) {
-//						continue;
-//					}
-					if (commitSelection.contains(gitRepo.getCurrentCommitName())) {
-						if (!supplementallyDone.contains(gitRepo.getCurrentCommitName()) && !found) {
-							gitRepo.moveToPreviousCommit();
-							this.clearSupplemental();
-							found = true;
-							System.out.println("found it");
-							System.out.println("Last commit supplementally Extracted was " + gitRepo.getCurrentCommitName());
-						} else {
-							if (!found)
-								continue;
-						}
+					if (listofDone.contains(gitRepo.getCurrentCommitName())) {
+						continue;
 					}
+//					if (commitSelection.contains(gitRepo.getCurrentCommitName())) {
+//						if ((!supplementallyDone.contains(gitRepo.getCurrentCommitName())) && (!found)) {
+//							gitRepo.moveToPreviousCommit();
+//							this.clearSupplemental();
+//							found = true;
+//							System.out.println("found it");
+//							System.out.println("Last commit supplementally Extracted was for " + gitRepo.getProjectName() + " is " + gitRepo.getCurrentCommitName());
+//						} else {
+//							if (!found)
+//								continue;
+//						}
+//					}
 //					if (listofDone.contains(gitRepo.getCurrentCommitName())) {
 //						if (gitRepo.checkoutNextCommit()) {
 //							if (RunConfiguration.EXTRACTOR_TYPES.contains(ExtractorType.IDS)) {
@@ -210,18 +215,21 @@ public class RepoRunner implements Runnable {
 //					}
 //				System.out.println(gitRepo.getCurrentCommitName());
 					if (gitRepo.checkoutNextCommit()) {
-
-						for (MoveFilesAndFolders mfaf : this.moverUtilities) {
-							MoveFilesAndFolders moveFilesAndFoldersOfCommit = mfaf.getNewInstance(
-									gitRepo.getProjectPath(),
-									gitRepo.getRootPath().replace("/projects_extracted", "") + "increments/"
-											+ RunConfiguration.SELECTED_COMMITS + "/" + gitRepo.getProjectName()
-											+ gitRepo.getCurrentCommitName() + "/",
-									gitRepo.getChangedFiles());
-							// using the initialized mover move all files from their old location to a new
-							// temporary location to run the extractor on
-							moveFilesAndFoldersOfCommit.moveAllFromMap();
-						}
+//						if (language == "java" && RunConfiguration.EXTRACTOR_TYPES.get(0) == ExtractorType.SUPPLEMENTAL)
+//							; // do nothing
+//						else
+//							if (language == "java" && RunConfiguration.EXTRACTOR_TYPES.get(0) == ExtractorType.SUPPLEMENTAL)
+//						for (MoveFilesAndFolders mfaf : this.moverUtilities) {
+//							MoveFilesAndFolders moveFilesAndFoldersOfCommit = mfaf.getNewInstance(
+//									gitRepo.getProjectPath(),
+//									gitRepo.getRootPath().replace("/projects_extracted", "") + "increments/"
+//											+ RunConfiguration.SELECTED_COMMITS + "/" + gitRepo.getProjectName()
+//											+ gitRepo.getCurrentCommitName() + "/",
+//									gitRepo.getChangedFiles());
+//							// using the initialized mover move all files from their old location to a new
+//							// temporary location to run the extractor on
+//							moveFilesAndFoldersOfCommit.moveAllFromMap();
+//						}
 						// initialize an extractor for this commit
 						for (ExtractionMethod em : this.extractionMethods) {
 							if (em.getNewInstance(gitRepo.getCurrentCommitName(),

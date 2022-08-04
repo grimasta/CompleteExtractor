@@ -16,28 +16,29 @@ public class CommitSelection {
 
 	private Set<String> currentCollection = new HashSet<String>();
 	private Set<String> yearBasedSelection = new HashSet<String>();
+
 	public CommitSelection() {
 	}
 
 	public void init(String projectName) {
 		currentCollection.clear();
-		try {
-			projectName = projectName.replace("/", "");
-			BufferedReader br;
+		if (!RunConfiguration.SELECTED_COMMITS.equals("allCommits"))
+			try {
+				projectName = projectName.replace("/", "");
+				BufferedReader br;
 //			switch(System.getProperty("os.name")) {
 //			case "Linux":
-			br = new BufferedReader(
-						new FileReader(new File("../../ExtractorUtilities/selected_commits_sibyl/"
-								+ RunConfiguration.SELECTED_COMMITS + "/" + projectName + ".csv")));
-			while (br.ready()) {
-				currentCollection.add(br.readLine().replace("\n", ""));
+				br = new BufferedReader(new FileReader(new File("../../ExtractorUtilities/selected_commits_sibyl/"
+						+ RunConfiguration.SELECTED_COMMITS + "/" + projectName + ".csv")));
+				while (br.ready()) {
+					currentCollection.add(br.readLine().replace("\n", ""));
+				}
+				br.close();
+				System.out.println(
+						"A total of " + currentCollection.size() + " commits will be analysed for " + projectName);
+			} catch (IOException ioe) {
+				System.out.println(ioe.getMessage());
 			}
-			br.close();
-			System.out
-					.println("A total of " + currentCollection.size() + " commits will be analysed for " + projectName);
-		} catch (IOException ioe) {
-			System.out.println(ioe.getMessage());
-		}
 
 	}
 
@@ -51,7 +52,7 @@ public class CommitSelection {
 
 	public void setYearlySelectedCommits(List<String> selectedFromYear) {
 		this.yearBasedSelection.addAll(selectedFromYear);
-		
+
 	}
 
 }
