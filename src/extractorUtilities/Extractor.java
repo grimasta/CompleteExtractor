@@ -110,6 +110,7 @@ public class Extractor implements ExtractionMethod {
 		if (targetProject.exists() && targetProject.isDirectory()) {
 			String pwd = this.rootPath;
 			System.out.println("started_extraction");
+			ConsoleFactory.getConsole().run("Xvfb :1 -screen 0 1024x768x16 &", this.target);
 			done = (ConsoleFactory.getConsole().run(new String[] {fetchScript, this.projectName}, null, new File(pwd), target) == 0);
 //			done = (ConsoleFactory.getConsole().run(fetchScript + " " + this.projectName, null, new File(pwd)) == 0);
 			System.out.println("finished_extraction");
