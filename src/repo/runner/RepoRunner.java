@@ -118,19 +118,23 @@ public class RepoRunner implements Runnable {
 		if (threads == 0) {
 			gitRepo.initializeGitRepo();
 			List<String> selectedFromYear;
-			File resultStorage = new File(DynamicPaths.getPath() + "increments/" + RunConfiguration.SELECTED_COMMITS + "/" + gitRepo.getProjectName());
-			if (!resultStorage.exists()){
-				resultStorage.mkdirs();
-			}
+//			File resultStorage = new File(DynamicPaths.getPath() + RunConfiguration.EXTRACTOR_TYPES.get(0).label + "/"
+//					+ RunConfiguration.SELECTED_COMMITS + "/" + gitRepo.getProjectName());
+//			if (!resultStorage.exists()){
+//				resultStorage.mkdirs();
+//			}
 			File alreadydone = new File(DynamicPaths.getPath() + RunConfiguration.EXTRACTOR_TYPES.get(0).label + "/"
 					+ RunConfiguration.SELECTED_COMMITS + "/" + gitRepo.getProjectName());
 			if (!alreadydone.exists())
 				alreadydone.mkdirs();
 			List<String> listofDone = new ArrayList<>();
+			System.out.println(alreadydone);
 			if (alreadydone.exists())
 				for (File file : alreadydone.listFiles()) {
+					
 					listofDone.add(file.getName().replace("stored_", "").replace(".json", ""));
 				}
+			System.out.println(listofDone.size() + " commits have already been extracted for " + gitRepo.getProjectName());
 			if (RunConfiguration.SELECTED_YEARS.length > 0) {
 				selectedFromYear = gitRepo.getAllCommitNamesForYear(RunConfiguration.SELECTED_YEARS);
 				commitSelection.setYearlySelectedCommits(selectedFromYear);

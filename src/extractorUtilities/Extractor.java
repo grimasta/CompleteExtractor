@@ -114,7 +114,7 @@ public class Extractor implements ExtractionMethod {
 			done = (ConsoleFactory.getConsole().run(new String[] {fetchScript, this.projectName}, null, new File(pwd), target) == 0);
 //			done = (ConsoleFactory.getConsole().run(fetchScript + " " + this.projectName, null, new File(pwd)) == 0);
 			System.out.println("finished_extraction");
-
+			
 			done = done && (ConsoleFactory.getConsole().run(new String[] {rsfWithNamesScript, this.projectName + ".rsf"}, null,
 					new File(pwd), target) == 0);
 			storeExtraction();
@@ -146,8 +146,8 @@ public class Extractor implements ExtractionMethod {
 	public void storeExtraction() {
 		// this.rootPath;
 		MoveFilesAndFolders moveFilesAndFoldersResultsOfExtraction = new MoveFilesAndFolders(this.rootPath,
-				this.rootPath.split("projects_extracted")[0] + "increments/" + RunConfiguration.SELECTED_COMMITS + "/" + this.projectName + "/stored_" + this.target + "/");
-		System.out.println(this.rootPath + " ||||| " + this.rootPath.split("projects_extracted")[0] + "increments/" + RunConfiguration.SELECTED_COMMITS + "/" + this.projectName + "/stored_" + this.target + "/");
+				this.rootPath.split("projects_extracted")[0] + RunConfiguration.EXTRACTOR_TYPES.get(0).label + "/" + RunConfiguration.SELECTED_COMMITS + "/" + this.projectName + "/stored_" + this.target + "/");
+//		System.out.println(this.rootPath + " ||||| " + this.rootPath.split("projects_extracted")[0] + "increments/" + RunConfiguration.SELECTED_COMMITS + "/" + this.projectName + "/stored_" + this.target + "/");
 		moveFilesAndFoldersResultsOfExtraction.move(this.projectName + ".rsf");
 		moveFilesAndFoldersResultsOfExtraction.move(this.projectName + "_final.rsf");
 		moveFilesAndFoldersResultsOfExtraction.move(this.projectName + "_names.rsf");
@@ -159,7 +159,7 @@ public class Extractor implements ExtractionMethod {
 		String deleteCommand = "rm -r ";
 		File extractionLocation = new File(PathVMRectifier.deRectify(this.rootPath));
 		for (File f : extractionLocation.listFiles())
-			if (f.getName().contains(".rsf") || f.getName().contains(".log") || f.getName().contains(".cdif"))
+			if (f.getName().contains(this.projectName + ".rsf") || f.getName().contains(this.projectName + ".log") || f.getName().contains(this.projectName + ".cdif"))
 				f.delete();
 		String folderTreeForDeletion = this.rootPath + this.projectName + "/dbdump";
 		ConsoleFactory.getConsole().run(deleteCommand + folderTreeForDeletion, target);

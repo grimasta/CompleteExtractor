@@ -62,7 +62,8 @@ public class MoveFilesAndFolders {
 		File destination = new File(PathVMRectifier.deRectify(this.destinationPath));
 		if (!destination.exists())
 			mkdir(this.destinationPath);
-		ConsoleFactory.getConsole().run(DynamicCommands.getDynamicCopy() + source + " " + target, currentCommitID);
+		if (new File(PathVMRectifier.deRectify(source)).exists())
+			ConsoleFactory.getConsole().run(DynamicCommands.getDynamicCopy() + source + " " + target, currentCommitID);
 	}
 
 	/**
