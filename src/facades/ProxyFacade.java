@@ -32,7 +32,7 @@ public class ProxyFacade extends ExtractionFacade {
 		List<RepoRunner> repoRunners = new ArrayList<RepoRunner>();
 		List<Future<?>> repoRunning = new ArrayList<Future<?>>();
 //		ExecutorService es = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()-1);
-		ExecutorService es = Executors.newFixedThreadPool(6);
+		ExecutorService es = Executors.newFixedThreadPool(7);
 		System.out.println(System.getProperties());
 		for (String repoAddress : repos) {
 			// initialize the repository (clone from remote or simply load an existing repo)
